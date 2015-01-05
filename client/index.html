@@ -6,6 +6,12 @@
     <script data-main="js/home" src="js/lib/require-jquery.js"></script>
   </head>
   <body>
-    <canvas height="300px" width="300px"></canvas>
+    <div id="container">
+      <div id="canvas">
+        <canvas id="background"></canvas>
+        <canvas id="entities"></canvas>
+        <canvas id="foreground" class="clickable"></canvas>
+      </div>
+    </div>
   </body>
 </html>
