@@ -8,17 +8,22 @@ define(['renderer', 'updater'], function(Renderer, Updater) {
     },
 
     setup: function(canvas, background, foreground) {
-      this.setRenderer = new Renderer(this, canvas, background, foreground);
+      this.setRenderer(new Renderer(this, canvas, background, foreground));
     },
 
     setRenderer: function(renderer) {
       this.renderer = renderer;
     },
 
+    setUpdater: function(updater) {
+      this.updater = updater;
+    },
+
     run: function() {
-      this.setUpdater = new Updater(this);
+      this.setUpdater(new Updater(this));
 
       if(this.hasNeverStarted) {
+        this.started = true;
         this.start();
       }
     },
