@@ -49,7 +49,15 @@ define(['camera'], function(Camera) {
   
       this.forecanvas.width = this.canvas.width;
       this.forecanvas.height = this.canvas.height;
-    }
+    },
+
+    renderFrame: function() {
+      this.clearScreen(this.context);
+    },
+
+    clearScreen: function(context) {
+      context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
   });
 
   return Renderer;
