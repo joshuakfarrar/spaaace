@@ -1,14 +1,26 @@
-define(['renderer', 'updater'], function(Renderer, Updater) {
+define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'physics'],
+ function(Renderer, Updater, Player, Sprite, Entity, Input, Physics) {
   var Game = Class.extend({
     init: function(app) {
       this.app = app;
       this.ready = false;
       this.started = false;
       this.hasNeverStarted = true;
+ 
+      this.player = new Player("player", "Joshua", this);
+
+      this.sprites = {};
+      this.entities = {};
+
+      this.spriteNames = ["ship"];
     },
 
     setup: function(canvas, background, foreground) {
       this.setRenderer(new Renderer(this, canvas, background, foreground));
+    },
+
+    setInput: function(input) {
+      this.input = input;
     },
 
     setRenderer: function(renderer) {
@@ -19,17 +31,46 @@ define(['renderer', 'updater'], function(Renderer, Updater) {
       this.updater = updater;
     },
 
-    run: function() {
-      this.setUpdater(new Updater(this));
+    setPhysics: function(physics) {
+      this.physics = physics;
+    },
 
-      if(this.hasNeverStarted) {
-        this.started = true;
-        this.start();
+    run: function() {
+      var self = this;
+
+      this.loadSprites();
+      this.setUpdater(new Updater(this));
+      this.setInput(new Input(this));
+      this.setPhysics(new Physics(this));
+      this.camera = this.renderer.camera;
+
+      var wait = setInterval(function() {
+        if (self.spritesLoaded()) {
+          self.initPlayer();
+          self.addEntity(self.player);
+
+          if(self.hasNeverStarted) {
+            self.started = true;
+            self.start();
+          }
+          clearInterval(wait);
+        }
+      }, 100);
+    },
+
+    initPlayer: function() {
+      this.player.setSprite(this.sprites[this.player.getSpriteName()]);
+      this.physics.enable(this.player);
+    },
+
+    addEntity: function(entity) {
+      if(this.entities[entity.id] === undefined) {
+        this.entities[entity.id] = entity;
+        // this.registerEntityPosition(entity);
       }
     },
 
     tick: function() {
-      console.log("tick");
       this.currentTime = new Date().getTime();
 
       if (this.started) {
@@ -49,6 +90,27 @@ define(['renderer', 'updater'], function(Renderer, Updater) {
 
     stop: function() {
       this.isStopped = true;
+    },
+
+    loadSprites: function() {
+      _.each(this.spriteNames, this.loadSprite, this);
+    },
+
+    loadSprite: function(name) {
+      this.sprites[name] = new Sprite(name);
+    },
+
+    spritesLoaded: function() {
+      if(_.any(this.sprites, function(sprite) { return !sprite.isLoaded; })) {
+        return false;
+      }
+      return true;
+    },
+
+    forEachEntity: function(callback) {
+      _.each(this.entities, function(entity) {
+        callback(entity);
+      });
     }
   });
 
