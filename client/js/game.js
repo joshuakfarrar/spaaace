@@ -1,5 +1,5 @@
-define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'physics'],
- function(Renderer, Updater, Player, Sprite, Entity, Input, Physics) {
+define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'map', 'physics'],
+ function(Renderer, Updater, Player, Sprite, Entity, Input, Map, Physics) {
   var Game = Class.extend({
     init: function(app) {
       this.app = app;
@@ -46,6 +46,7 @@ define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'physics']
 
       var wait = setInterval(function() {
         if (self.spritesLoaded()) {
+
           self.initPlayer();
           self.addEntity(self.player);
 
@@ -58,6 +59,10 @@ define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'physics']
       }, 100);
     },
 
+    loadMap: function() {
+      this.map = new Map(this);
+    },
+
     initPlayer: function() {
       this.player.setSprite(this.sprites[this.player.getSpriteName()]);
       this.physics.enable(this.player);
@@ -66,7 +71,6 @@ define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'physics']
     addEntity: function(entity) {
       if(this.entities[entity.id] === undefined) {
         this.entities[entity.id] = entity;
-        // this.registerEntityPosition(entity);
       }
     },
 
@@ -84,6 +88,7 @@ define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'physics']
     },
 
     start: function() {
+      this.renderer.renderSpace();
       this.tick();
       this.hasNeverStarted = false;
     },

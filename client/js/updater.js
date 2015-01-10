@@ -24,6 +24,8 @@ define(['keyboard'], function(Keyboard) {
         this.player.body.acceleration.y = 0;
       }
 
+      // console.log(this.player.body.position.x, this.player.body.position.y);
+
       // call tick() to update all entities w/ attached physics
       _.each(this.game.entities, function(entity) {
         if (entity && entity.body) {

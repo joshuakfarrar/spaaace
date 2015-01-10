@@ -5,10 +5,13 @@ define(['camera', 'map'], function(Camera, Map) {
       this.context = (canvas && canvas.getContext) ? canvas.getContext("2d") : null;
       this.background = (background && background.getContext) ? background.getContext("2d") : null;
       this.foreground = (foreground && foreground.getContext) ? foreground.getContext("2d") : null;
-  
+
       this.canvas = canvas;
       this.backcanvas = background;
       this.forecanvas = foreground;
+
+      this.spacecanvas = document.createElement('canvas');
+      this.space = (this.spacecanvas && this.spacecanvas.getContext) ? this.spacecanvas.getContext("2d") : null;
 
       this.map = new Map(this);
 
@@ -52,13 +55,15 @@ define(['camera', 'map'], function(Camera, Map) {
       this.forecanvas.width = this.canvas.width;
       this.forecanvas.height = this.canvas.height;
 
-      this.map.rescale();
+      this.spacecanvas.width = this.canvas.width * 3;
+      this.spacecanvas.height = this.canvas.height * 3;
+
     },
 
     renderFrame: function() {
       this.clearScreen(this.context);
 
-      this.drawBackground();
+      this.drawSpace();
       this.drawEntities();
     },
 
@@ -66,8 +71,33 @@ define(['camera', 'map'], function(Camera, Map) {
       context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 
-    drawBackground: function(context) {
-      this.background.drawImage(this.map.backcanvas, this.camera.x + this.game.player.body.position.x, this.camera.y + this.game.player.body.position.y, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+    drawBackground: function(context, color) {
+      context.fillStyle = color;
+      context.fillRect(0, 0, this.spacecanvas.width, this.spacecanvas.height);
+    },
+
+    drawSpace: function() {
+      this.background.drawImage(this.spacecanvas, this.camera.x + this.game.player.body.position.x, this.camera.y + this.game.player.body.position.y, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+    },
+
+    renderSpace: function() {
+      var m = this.game.map;
+
+      m.generateStars(this.spacecanvas);
+
+      this.drawBackground(this.space, "#000000");
+      this.drawStars(m.stars);
+    },
+
+    drawStars: function(stars) {
+      _.each(stars, this.drawStar, this);
+    },
+
+    drawStar: function(star) {
+      this.space.save();
+        this.space.fillStyle = "#ffffff";
+        this.space.fillRect(star.x, star.y, star.size, star.size);
+      this.space.restore();
     },
 
     drawEntities: function() {

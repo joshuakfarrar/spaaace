@@ -18,6 +18,7 @@ define(['jquery', 'app'], function($, App) {
 
       game = new Game(app);
       game.setup(canvas, background, foreground);
+      game.loadMap();
 
       game.run();
 
