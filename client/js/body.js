@@ -5,7 +5,7 @@ define(function() {
 
       this.MAX_VELOCITY = { x: 2, y: 2 };
 
-      this.position = { x: this.entity.x, y: this.entity.y };
+      this.position = { x: this.entity.x || 0, y: this.entity.y || 0 };
 
       this.velocity = { x: 0, y: 0 };
       this.acceleration = { x: 0, y: 0 };

@@ -47,6 +47,7 @@ define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'map', 'ph
       var wait = setInterval(function() {
         if (self.spritesLoaded()) {
 
+          self.initAreas();
           self.initPlayer();
           self.addEntity(self.player);
 
@@ -66,6 +67,12 @@ define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'map', 'ph
     initPlayer: function() {
       this.player.setSprite(this.sprites[this.player.getSpriteName()]);
       this.physics.enable(this.player);
+    },
+
+    initAreas: function() {
+      var self = this;
+
+      this.map.addArea(0, 0, 200, 200);
     },
 
     addEntity: function(entity) {

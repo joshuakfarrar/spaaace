@@ -79,7 +79,18 @@ define(['camera', 'map', 'player'], function(Camera, Map, Player) {
     },
 
     drawSpace: function() {
-      this.background.drawImage(this.spacecanvas, this.camera.x + this.game.player.body.position.x, this.camera.y + this.game.player.body.position.y, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+      var canvas = this.spacecanvas,
+          sx = this.game.player.body.position.x - this.canvas.width / 2,
+          sy = this.game.player.body.position.y - this.canvas.height / 2,
+          swidth = this.canvas.width,
+          sheight = this.canvas.height,
+          x = 0,
+          y = 0,
+          width = this.canvas.width,
+          height = this.canvas.height;
+
+      this.drawBackground(this.background, "#000000");
+      this.background.drawImage(canvas, sx, sy, swidth, sheight, x, y, width, height);
     },
 
     renderSpace: function() {

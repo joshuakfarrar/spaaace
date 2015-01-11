@@ -5,9 +5,6 @@ define(['entity'], function(Entity) {
       this.name = name;
       this.game = game;
 
-      this.x = 300;
-      this.y = 300;
-
       this.angle = -90;
 
       this.ROTATION_SPEED = 2;
