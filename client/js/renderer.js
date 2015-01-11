@@ -1,4 +1,4 @@
-define(['camera', 'map'], function(Camera, Map) {
+define(['camera', 'map', 'player'], function(Camera, Map, Player) {
   var Renderer = Class.extend({
     init: function(game, canvas, background, foreground) {
       this.game = game;
@@ -55,8 +55,8 @@ define(['camera', 'map'], function(Camera, Map) {
       this.forecanvas.width = this.canvas.width;
       this.forecanvas.height = this.canvas.height;
 
-      this.spacecanvas.width = this.canvas.width * 3;
-      this.spacecanvas.height = this.canvas.height * 3;
+      this.spacecanvas.width = this.canvas.width * 7;
+      this.spacecanvas.height = this.canvas.height * 7;
 
     },
 
@@ -72,8 +72,10 @@ define(['camera', 'map'], function(Camera, Map) {
     },
 
     drawBackground: function(context, color) {
-      context.fillStyle = color;
-      context.fillRect(0, 0, this.spacecanvas.width, this.spacecanvas.height);
+      context.save();
+        context.fillStyle = color;
+        context.fillRect(0, 0, this.spacecanvas.width, this.spacecanvas.height);
+      context.restore();
     },
 
     drawSpace: function() {
@@ -110,16 +112,23 @@ define(['camera', 'map'], function(Camera, Map) {
 
     drawEntity: function(entity) {
       var sprite = entity.sprite,
-          angle = entity.angle
+          angle = entity.angle,
+          x = 0,
+          y = 0,
           dx = sprite.offsetX,
           dy = sprite.offsetY,
           dw = sprite.width,
           dh = sprite.height;
 
+      // this is totally a hack
+      if (entity instanceof Player && this.game.player.isMoving()) {
+        y = 32;
+      }
+
       this.context.save();
       this.context.translate(this.canvas.width / 2, this.canvas.height / 2);
       this.context.rotate(angle * Math.PI/180);
-      this.context.drawImage(sprite.image, 0, 0, 32, 32, dx, dy, 32, 32);
+      this.context.drawImage(sprite.image, x, y, 32, 32, dx, dy, 32, 32);
       this.context.restore();
     }
   });

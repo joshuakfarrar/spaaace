@@ -19,6 +19,14 @@ define(['entity'], function(Entity) {
 
     getSpriteName: function() {
       return this.spriteName;
+    },
+
+    isMoving: function() {
+      if (this.body.acceleration.x || this.body.acceleration.y) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
   });

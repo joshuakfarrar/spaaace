@@ -32,6 +32,10 @@ define(['keyboard'], function(Keyboard) {
           entity.body.tick();
         }
       });
+
+      // this.player.checkZone(function() {
+
+      // })
     },
   });
 
