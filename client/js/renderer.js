@@ -94,12 +94,13 @@ define(['camera', 'map', 'player'], function(Camera, Map, Player) {
     },
 
     renderSpace: function() {
-      var m = this.game.map;
+      var map = this.game.map;
 
-      m.generateStars(this.spacecanvas);
+      map.generateStars(this.spacecanvas);
 
       this.drawBackground(this.space, "#000000");
-      this.drawStars(m.stars);
+      this.drawStars(map.stars);
+      this.drawPlanets(map.planets);
     },
 
     drawStars: function(stars) {
@@ -110,6 +111,36 @@ define(['camera', 'map', 'player'], function(Camera, Map, Player) {
       this.space.save();
         this.space.fillStyle = "#ffffff";
         this.space.fillRect(star.x, star.y, star.size, star.size);
+      this.space.restore();
+    },
+
+    drawPlanets: function(planets) {
+      _.each(planets, this.drawPlanet, this);
+    },
+
+    drawPlanet: function(planet) {
+      console.log("drawing planet at " + planet.x + ", " + planet.y);
+      this.space.save();
+        // this.space.beginPath();
+        // this.space.strokeStyle = "#fafafa";
+        // this.space.strokeRect(
+        //   planet.area.x - planet.area.radius,
+        //   planet.area.y - planet.area.radius,
+        //   planet.area.radius * 2,
+        //   planet.area.radius * 2
+        // );
+
+        // this.space.beginPath();
+        // this.space.arc(planet.area.x, planet.area.y, planet.area.radius, 0, 2 * Math.PI, false);
+        // this.space.lineWidth = 1;
+        // this.space.strokeStyle = "#fafafa";
+        // this.space.stroke();
+
+        this.space.fillStyle = "#ffffff";
+        this.space.beginPath();
+        this.space.arc(planet.x, planet.y, planet.radius, 0, 2 * Math.PI, false);
+        this.space.fill();
+        this.space.stroke();
       this.space.restore();
     },
 

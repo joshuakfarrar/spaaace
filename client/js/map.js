@@ -1,9 +1,10 @@
-define(['star', 'area'], function(Star, Area) {
+define(['star', 'area', 'planet'], function(Star, Area, Planet) {
   var Map = Class.extend({
     init: function(game) {
       this.game = game;
 
       this.stars = [];
+      this.planets = [];
       this.areas = [];
     },
 
@@ -12,13 +13,29 @@ define(['star', 'area'], function(Star, Area) {
       this.areas.push(area);
     },
 
-    getCurrentZone: function(entity) {
-      var area = _.detect(this.areas, function(area) {
+    addPlanet: function(x, y, radius) {
+      var planet = new Planet(x, y, radius);
+      this.planets.push(planet);
+      this.areas.push(planet.area);
+    },
+
+    // getCurrentZone: function(entity) {
+    //   var area = _.detect(this.areas, function(area) {
+    //     return area.contains(entity);
+    //   });
+
+    //   if (area) {
+    //     // console.log("You're in an area!");
+    //   }
+    // },
+
+    getCurrentZones: function(entity) {
+      var areas = _.filter(this.areas, function(area) {
         return area.contains(entity);
       });
 
-      if (area) {
-        console.log("You're in an area!");
+      if (areas.length > 0) {
+        console.log('hey.');
       }
     },
 

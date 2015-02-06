@@ -33,7 +33,12 @@ define(['keyboard'], function(Keyboard) {
         }
       });
 
-      this.checkZone();
+      // this.checkZone();
+      this.checkZones();
+    },
+
+    checkZones: function() {
+      this.game.map.getCurrentZones(this.player);
     },
 
     checkZone: function() {
