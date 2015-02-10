@@ -1,4 +1,4 @@
-define(['camera', 'map', 'player'], function(Camera, Map, Player) {
+define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
   var Renderer = Class.extend({
     init: function(game, canvas, background, foreground) {
       this.game = game;
@@ -65,6 +65,7 @@ define(['camera', 'map', 'player'], function(Camera, Map, Player) {
 
       this.drawSpace();
       this.drawEntities();
+      this.drawPlayer();
     },
 
     clearScreen: function(context) {
@@ -79,9 +80,20 @@ define(['camera', 'map', 'player'], function(Camera, Map, Player) {
     },
 
     drawSpace: function() {
+
+      var ship = this.game.player.getShip();
+
+      var player = (ship && ship.body) ? {
+        x: ship.body.position.x,
+        y: ship.body.position.y
+      } : {
+        x: 0,
+        y: 0
+      }
+
       var canvas = this.spacecanvas,
-          sx = this.game.player.body.position.x - this.canvas.width / 2,
-          sy = this.game.player.body.position.y - this.canvas.height / 2,
+          sx = player.x - this.canvas.width / 2,
+          sy = player.y - this.canvas.height / 2,
           swidth = this.canvas.width,
           sheight = this.canvas.height,
           x = 0,
@@ -119,7 +131,13 @@ define(['camera', 'map', 'player'], function(Camera, Map, Player) {
     },
 
     drawPlanet: function(planet) {
-      console.log("drawing planet at " + planet.x + ", " + planet.y);
+      var colors = {
+        red: "#ff0000",
+        green: "#00ff00",
+        white: "#ffffff",
+        black: "#000000"
+      }
+
       this.space.save();
         // this.space.beginPath();
         // this.space.strokeStyle = "#fafafa";
@@ -130,17 +148,16 @@ define(['camera', 'map', 'player'], function(Camera, Map, Player) {
         //   planet.area.radius * 2
         // );
 
-        // this.space.beginPath();
-        // this.space.arc(planet.area.x, planet.area.y, planet.area.radius, 0, 2 * Math.PI, false);
-        // this.space.lineWidth = 1;
-        // this.space.strokeStyle = "#fafafa";
-        // this.space.stroke();
+        this.space.beginPath();
+        this.space.arc(planet.area.x, planet.area.y, planet.area.radius, 0, 2 * Math.PI, false);
+        this.space.lineWidth = 1;
+        this.space.strokeStyle = (planet.hostile) ? colors.red : colors.green;
+        this.space.stroke();
 
-        this.space.fillStyle = "#ffffff";
+        this.space.fillStyle = colors.white;
         this.space.beginPath();
         this.space.arc(planet.x, planet.y, planet.radius, 0, 2 * Math.PI, false);
         this.space.fill();
-        this.space.stroke();
       this.space.restore();
     },
 
@@ -152,7 +169,34 @@ define(['camera', 'map', 'player'], function(Camera, Map, Player) {
       });
     },
 
+    drawPlayer: function() {
+      var player = this.game.player,
+          ship = player.ship;
+
+      var sprite = ship.sprite,
+          angle = ship.angle,
+          x = 0,
+          y = 0,
+          dx = sprite.offsetX,
+          dy = sprite.offsetY,
+          dw = sprite.width,
+          dh = sprite.height;
+
+      // this is totally a hack
+      if (ship.isMoving()) {
+        y = 32;
+      }
+
+      this.context.save();
+      this.context.translate(this.canvas.width / 2, this.canvas.height / 2);
+      this.context.rotate(angle * Math.PI/180);
+      this.context.drawImage(sprite.image, x, y, 32, 32, dx, dy, 32, 32);
+      this.context.restore();
+    },
+
     drawEntity: function(entity) {
+      if (typeof entity === 'undefined') return false;
+
       var sprite = entity.sprite,
           angle = entity.angle,
           x = 0,
@@ -163,15 +207,14 @@ define(['camera', 'map', 'player'], function(Camera, Map, Player) {
           dh = sprite.height;
 
       // this is totally a hack
-      if (entity instanceof Player && this.game.player.isMoving()) {
+      if (entity instanceof Ship && entity.isMoving()) {
         y = 32;
       }
 
-      this.context.save();
-      this.context.translate(this.canvas.width / 2, this.canvas.height / 2);
-      this.context.rotate(angle * Math.PI/180);
-      this.context.drawImage(sprite.image, x, y, 32, 32, dx, dy, 32, 32);
-      this.context.restore();
+      this.space.save();
+      this.space.rotate(angle * Math.PI/180);
+      this.space.drawImage(sprite.image, x, y, 32, 32, dx, dy, 32, 32);
+      this.space.restore();
     }
   });
 

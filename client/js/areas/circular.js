@@ -1,9 +1,10 @@
 define(function() {
-  var Area = Class.extend({
-    init: function(x, y, radius) {
+  var Circular = Class.extend({
+    init: function(x, y, radius, event) {
       this.x = x;
       this.y = y;
       this.radius = radius;
+      this.event = event;
     },
 
     contains: function(entity) {
@@ -17,6 +18,6 @@ define(function() {
       }
     },
   });
-  
-  return Area;
+
+  return Circular;
 });

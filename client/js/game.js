@@ -1,5 +1,5 @@
-define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'map', 'physics'],
- function(Renderer, Updater, Player, Sprite, Entity, Input, Map, Physics) {
+define(['renderer', 'updater', 'player', 'ships/reaper', 'planets/earth', 'sprite', 'entity', 'input', 'map', 'physics'],
+ function(Renderer, Updater, Player, Reaper, Earth, Sprite, Entity, Input, Map, Physics) {
   var Game = Class.extend({
     init: function(app) {
       this.app = app;
@@ -10,7 +10,7 @@ define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'map', 'ph
       this.player = new Player("player", "Joshua", this);
 
       this.sprites = {};
-      this.entities = {};
+      this.entities = [];
 
       this.spriteNames = ["ship"];
     },
@@ -47,10 +47,8 @@ define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'map', 'ph
       var wait = setInterval(function() {
         if (self.spritesLoaded()) {
 
-          // self.initAreas();
           self.initPlanets();
           self.initPlayer();
-          self.addEntity(self.player);
 
           if(self.hasNeverStarted) {
             self.started = true;
@@ -66,25 +64,43 @@ define(['renderer', 'updater', 'player', 'sprite', 'entity', 'input', 'map', 'ph
     },
 
     initPlayer: function() {
-      this.player.setSprite(this.sprites[this.player.getSpriteName()]);
-      this.physics.enable(this.player);
+      if (this.player.setShip(new Reaper(this.player, "Kaylee"))) {
+        this.player.ship.setSprite(this.sprites[this.player.ship.getSpriteName()]);
+        this.physics.enable(this.player.ship); 
+      }
     },
-
-    // initAreas: function() {
-    //   var self = this;
-
-    //   this.map.addArea(0, 0, 200, 200);
-    // },
 
     initPlanets: function() {
       var self = this;
-      this.map.addPlanet(400, 400, 50);
+
+      var earth = {
+        name: 'Earth',
+        x: 400,
+        y: 400,
+        radius: 100,
+        hostile: true
+      }
+
+      this.map.addPlanet(new Earth(this, earth));
+    },
+
+    addCharacter: function(character) {
+      console.log(character);
+      if (character && character.ship) {
+        character.ship.setSprite(this.sprites[character.ship.getSpriteName()]);
+        this.physics.enable(character.ship);
+        this.addEntity(character.ship);
+      }
     },
 
     addEntity: function(entity) {
-      if(this.entities[entity.id] === undefined) {
-        this.entities[entity.id] = entity;
-      }
+      this.entities.push(entity);
+    },
+
+    forEachEntity: function(callback) {
+      _.each(this.entities, function(entity) {
+        callback(entity);
+      });
     },
 
     tick: function() {

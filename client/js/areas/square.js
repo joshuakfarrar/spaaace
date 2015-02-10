@@ -1,5 +1,5 @@
 define(function() {
-  var Area = Class.extend({
+  var Square = Class.extend({
     init: function(x, y, width, height) {
       this.x = x;
       this.y = y;
@@ -19,5 +19,5 @@ define(function() {
     }
   });
   
-  return Area;
+  return Square;
 });

@@ -1,28 +1,27 @@
-define(['entity'], function(Entity) {
-  var Player = Entity.extend({
-    init: function(id, name, game) {
-      this._super(id);
-      this.name = name;
-      this.game = game;
-
-      this.angle = -90;
-
-      this.ROTATION_SPEED = 2;
-      this.ACCELERATION = .05;
-
-      // sprites
-      this.spriteName = "ship";
+define(['captain'], function(Captain) {
+  var Player = Captain.extend({
+    rotateLeft: function() {
+      if (this.hasShip()) {
+        this.ship.body.angularVelocity = -this.ship.ROTATION_SPEED;
+      }
     },
 
-    getSpriteName: function() {
-      return this.spriteName;
+    rotateRight: function() {
+      if (this.hasShip()) {
+        this.ship.body.angularVelocity = this.ship.ROTATION_SPEED;
+      }
     },
 
-    isMoving: function() {
-      if (this.body.acceleration.x || this.body.acceleration.y) {
-        return true;
-      } else {
-        return false;
+    stopRotation: function() {
+      if (this.hasShip()) {
+        this.ship.body.angularVelocity = 0;
+      }
+    },
+
+    stopAccelerating: function() {
+      if (this.hasShip()) {
+        this.ship.body.acceleration.x = 0;
+        this.ship.body.acceleration.y = 0;
       }
     }
 
