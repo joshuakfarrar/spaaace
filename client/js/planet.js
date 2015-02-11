@@ -38,13 +38,11 @@ define(['areas/circular', 'bot', 'ships/reaper'], function(CircularArea, Bot, Re
         var bot = new Bot('bot', captains[i], this.game);
         bot.setShip(new Reaper(bot, ships[i]));
         bot.ship.x = 100;
-        bot.ship.y = 100 * i;
+        bot.ship.y = 300 * i;
 
-        bot.ship.angle = 45;
+        bot.ship.angle = 135;
 
         this.game.addCharacter(bot);
-
-        bot.accelerate();
       }
     }
   });

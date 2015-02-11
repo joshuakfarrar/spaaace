@@ -26,6 +26,18 @@ define(['ship'], function(Ship) {
       }
     },
 
+    bankLeft: function() {
+      if (this.hasShip()) {
+        this.ship.body.angularVelocity = -this.ship.ROTATION_SPEED;
+      }
+    },
+
+    bankRight: function() {
+      if (this.hasShip()) {
+        this.ship.body.angularVelocity = this.ship.ROTATION_SPEED;
+      }
+    },
+
     hasShip: function() {
       return this.ship && this.ship.body
     },

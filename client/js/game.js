@@ -11,6 +11,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'planets/earth', 'sprit
 
       this.sprites = {};
       this.entities = [];
+      this.bots = [];
 
       this.spriteNames = ["ship"];
     },
@@ -89,11 +90,22 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'planets/earth', 'sprit
         character.ship.setSprite(this.sprites[character.ship.getSpriteName()]);
         this.physics.enable(character.ship);
         this.addEntity(character.ship);
+        this.addBot(character);
       }
     },
 
     addEntity: function(entity) {
       this.entities.push(entity);
+    },
+
+    addBot: function(bot) {
+      this.bots.push(bot);
+    },
+
+    forEachBot: function(callback) {
+      _.each(this.bots, function(bot) {
+        callback(bot);
+      });
     },
 
     forEachEntity: function(callback) {

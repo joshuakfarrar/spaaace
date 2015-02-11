@@ -7,6 +7,7 @@ define(['keyboard'], function(Keyboard) {
 
     update: function() {
       this.processInput();
+      this.updateBots();
       this.updateCharacters();
       this.updatePlayer();
       this.checkZones();
@@ -14,9 +15,9 @@ define(['keyboard'], function(Keyboard) {
 
     processInput: function() {
       if (this.game.input.isKeyDown(Keyboard.A)) {
-        this.player.rotateLeft();
+        this.player.bankLeft();
       } else if (this.game.input.isKeyDown(Keyboard.D)) {
-        this.player.rotateRight();
+        this.player.bankRight();
       } else {
         this.player.stopRotation();
       }
@@ -26,6 +27,18 @@ define(['keyboard'], function(Keyboard) {
       } else {
         this.player.stopAccelerating();
       }
+
+      if (this.game.input.isKeyDown(Keyboard.Space)) {
+        console.log("pew pew!");
+      }
+    },
+
+    updateBots: function() {
+      this.game.forEachBot(function(bot) {
+        if (bot && bot.tick) {
+          bot.tick();
+        }
+      });
     },
 
     updateCharacters: function() {
