@@ -32,9 +32,11 @@ define(['areas/circular', 'bot', 'ships/reaper'], function(CircularArea, Bot, Re
 
       console.log("Welcome to Planet " + this.name.substr(0, 1).toUpperCase() + this.name.substr(1) + ". Prepare to be slaughtered!");
 
+      var captains = ["April", "Thomas", "Mal"],
+          ships = ["The Warmies", "Swamp", "Serenity"];
       for (var i = 0; i < 3; i++) {
-        var bot = new Bot('bot', "April", this.game);
-        bot.setShip(new Reaper(bot, "Jayne"));
+        var bot = new Bot('bot', captains[i], this.game);
+        bot.setShip(new Reaper(bot, ships[i]));
         bot.ship.x = 100;
         bot.ship.y = 100 * i;
 
@@ -42,8 +44,7 @@ define(['areas/circular', 'bot', 'ships/reaper'], function(CircularArea, Bot, Re
 
         this.game.addCharacter(bot);
 
-        bot.ship.body.acceleration.x = 1;
-        bot.ship.body.acceleration.y = 1;
+        bot.accelerate();
       }
     }
   });

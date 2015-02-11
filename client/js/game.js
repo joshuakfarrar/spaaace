@@ -85,7 +85,6 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'planets/earth', 'sprit
     },
 
     addCharacter: function(character) {
-      console.log(character);
       if (character && character.ship) {
         character.ship.setSprite(this.sprites[character.ship.getSpriteName()]);
         this.physics.enable(character.ship);
