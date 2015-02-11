@@ -29,14 +29,14 @@ define(['star'], function(Star) {
       }
     },
 
-    generateStars: function(spacecanvas) {
-      var stars = spacecanvas.width;
+    generateStars: function(spaceCanvas) {
+      var stars = spaceCanvas.width;
 
       for (var i = 0, len = stars; i < len; i++) {
         this.stars.push(
           new Star(
-            Math.floor(Math.random() * spacecanvas.width),
-            Math.floor(Math.random() * spacecanvas.height),
+            Math.floor(Math.random() * spaceCanvas.width),
+            Math.floor(Math.random() * spaceCanvas.height),
             Math.floor(Math.random() * 2 + 1)
           )
         );

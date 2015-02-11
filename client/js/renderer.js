@@ -10,8 +10,11 @@ define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
       this.backcanvas = background;
       this.forecanvas = foreground;
 
-      this.spacecanvas = document.createElement('canvas');
-      this.space = (this.spacecanvas && this.spacecanvas.getContext) ? this.spacecanvas.getContext("2d") : null;
+      this.spaceCanvas = document.createElement('canvas');
+      this.space = (this.spaceCanvas && this.spaceCanvas.getContext) ? this.spaceCanvas.getContext("2d") : null;
+
+      this.spaceEntitiesCanvas = document.createElement('canvas');
+      this.spaceEntities = (this.spaceEntitiesCanvas && this.spaceEntitiesCanvas.getContext) ? this.spaceEntitiesCanvas.getContext("2d") : null;
 
       this.map = new Map(this);
 
@@ -55,45 +58,43 @@ define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
       this.forecanvas.width = this.canvas.width;
       this.forecanvas.height = this.canvas.height;
 
-      this.spacecanvas.width = this.canvas.width * 7;
-      this.spacecanvas.height = this.canvas.height * 7;
+      this.spaceCanvas.width = this.canvas.width * 7;
+      this.spaceCanvas.height = this.canvas.height * 7;
+
+      this.spaceEntitiesCanvas.width = this.canvas.width * 7;
+      this.spaceEntitiesCanvas.height = this.canvas.height * 7;
 
     },
 
     renderFrame: function() {
-      this.clearScreen(this.context);
+      var player = this.game.player.getPosition();
 
-      this.drawSpace();
-      this.drawEntities();
+      this.clearScreen(this.context);
+      this.drawSpace(player.x, player.y);
+      this.drawSpaceEntities(player.x, player.y);
       this.drawPlayer();
     },
 
     clearScreen: function(context) {
-      context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     },
 
     drawBackground: function(context, color) {
       context.save();
         context.fillStyle = color;
-        context.fillRect(0, 0, this.spacecanvas.width, this.spacecanvas.height);
+        context.fillRect(0, 0, this.spaceCanvas.width, this.spaceCanvas.height);
       context.restore();
     },
 
-    drawSpace: function() {
-
-      var ship = this.game.player.getShip();
-
-      var player = (ship && ship.body) ? {
-        x: ship.body.position.x,
-        y: ship.body.position.y
-      } : {
-        x: 0,
-        y: 0
+    drawSpace: function(x, y) {
+      var center = {
+        x: x || 0,
+        y: y || 0
       }
 
-      var canvas = this.spacecanvas,
-          sx = player.x - this.canvas.width / 2,
-          sy = player.y - this.canvas.height / 2,
+      var canvas = this.spaceCanvas,
+          sx = center.x - this.canvas.width / 2,
+          sy = center.y - this.canvas.height / 2,
           swidth = this.canvas.width,
           sheight = this.canvas.height,
           x = 0,
@@ -108,7 +109,7 @@ define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
     renderSpace: function() {
       var map = this.game.map;
 
-      map.generateStars(this.spacecanvas);
+      map.generateStars(this.spaceCanvas);
 
       this.drawBackground(this.space, "#000000");
       this.drawStars(map.stars);
@@ -132,7 +133,7 @@ define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
 
     drawPlanet: function(planet) {
       var colors = {
-        red: "#ff0000",
+        red:   "#ff0000",
         green: "#00ff00",
         white: "#ffffff",
         black: "#000000"
@@ -161,14 +162,6 @@ define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
       this.space.restore();
     },
 
-    drawEntities: function() {
-      var self = this;
-
-      this.game.forEachEntity(function(entity) {
-        self.drawEntity(entity);
-      });
-    },
-
     drawPlayer: function() {
       var player = this.game.player,
           ship = player.ship;
@@ -188,10 +181,24 @@ define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
       }
 
       this.context.save();
-      this.context.translate(this.canvas.width / 2, this.canvas.height / 2);
-      this.context.rotate(angle * Math.PI/180);
-      this.context.drawImage(sprite.image, x, y, 32, 32, dx, dy, 32, 32);
+        this.context.translate(this.canvas.width / 2, this.canvas.height / 2);
+        this.context.rotate(angle * Math.PI/180);
+        this.context.drawImage(sprite.image, x, y, 32, 32, dx, dy, 32, 32);
       this.context.restore();
+    },
+
+    drawSpaceEntities: function(x, y) {
+      this.clearScreen(this.spaceEntities);
+      this.drawEntities();
+      this.renderEntities(x, y);
+    },
+
+    drawEntities: function() {
+      var self = this;
+
+      this.game.forEachEntity(function(entity) {
+        self.drawEntity(entity);
+      });
     },
 
     drawEntity: function(entity) {
@@ -211,10 +218,30 @@ define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
         y = 32;
       }
 
-      this.space.save();
-      this.space.rotate(angle * Math.PI/180);
-      this.space.drawImage(sprite.image, x, y, 32, 32, dx, dy, 32, 32);
-      this.space.restore();
+      this.spaceEntities.save();
+        this.spaceEntities.translate(entity.body.position.x, entity.body.position.y);
+        this.spaceEntities.rotate(angle * Math.PI/180);
+        this.spaceEntities.drawImage(sprite.image, Math.floor(x), Math.floor(y), 32, 32, dx, dy, 32, 32);
+      this.spaceEntities.restore();
+    },
+
+    renderEntities: function(x, y) {
+      var center = {
+        x: x || 0,
+        y: y || 0
+      }
+
+      var canvas = this.spaceEntitiesCanvas,
+          sx = center.x - this.canvas.width / 2,
+          sy = center.y - this.canvas.height / 2,
+          swidth = this.canvas.width,
+          sheight = this.canvas.height,
+          x = 0,
+          y = 0,
+          width = this.canvas.width,
+          height = this.canvas.height;
+
+      this.background.drawImage(canvas, sx, sy, swidth, sheight, x, y, width, height);
     }
   });
 

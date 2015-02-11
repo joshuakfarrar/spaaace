@@ -28,6 +28,18 @@ define(['ship'], function(Ship) {
 
     hasShip: function() {
       return this.ship && this.ship.body
+    },
+
+    getPosition: function() {
+      var position = (this.hasShip()) ? {
+        x: this.ship.body.position.x,
+        y: this.ship.body.position.y
+      } : {
+        x: 0,
+        y: 0
+      }
+
+      return position;
     }
   });
 

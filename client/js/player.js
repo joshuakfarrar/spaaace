@@ -24,7 +24,6 @@ define(['captain'], function(Captain) {
         this.ship.body.acceleration.y = 0;
       }
     }
-
   });
 
   return Player;
