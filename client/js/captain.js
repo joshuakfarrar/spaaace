@@ -1,4 +1,4 @@
-define(['ship'], function(Ship) {
+define(['ship', 'entity'], function(Ship, Entity) {
   var Captain = Class.extend({
     init: function(id, name, game) {
       this.id = id;
@@ -19,6 +19,12 @@ define(['ship'], function(Ship) {
       return this.ship;
     },
 
+    target: function(entity) {
+      if (entity instanceof Entity) {
+        this.target = entity;
+      }
+    },
+
     accelerate: function() {
       if (this.hasShip()) {
         this.ship.body.acceleration.x = Math.cos(this.ship.angle * (Math.PI / 180)) * this.ship.ACCELERATION;
@@ -26,13 +32,13 @@ define(['ship'], function(Ship) {
       }
     },
 
-    bankLeft: function() {
+    turnLeft: function() {
       if (this.hasShip()) {
         this.ship.body.angularVelocity = -this.ship.ROTATION_SPEED;
       }
     },
 
-    bankRight: function() {
+    turnRight: function() {
       if (this.hasShip()) {
         this.ship.body.angularVelocity = this.ship.ROTATION_SPEED;
       }

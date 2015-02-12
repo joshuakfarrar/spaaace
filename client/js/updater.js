@@ -15,9 +15,9 @@ define(['keyboard'], function(Keyboard) {
 
     processInput: function() {
       if (this.game.input.isKeyDown(Keyboard.A)) {
-        this.player.bankLeft();
+        this.player.turnLeft();
       } else if (this.game.input.isKeyDown(Keyboard.D)) {
-        this.player.bankRight();
+        this.player.turnRight();
       } else {
         this.player.stopRotation();
       }
