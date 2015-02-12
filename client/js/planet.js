@@ -34,15 +34,20 @@ define(['areas/circular', 'bot', 'ships/reaper'], function(CircularArea, Bot, Re
 
       var captains = ["April", "Thomas", "Mal"],
           ships = ["The Warmies", "Swamp", "Serenity"];
-      for (var i = 0; i < 30; i++) {
-        var bot = new Bot('bot', captains[i], this.game);
-        bot.setShip(new Reaper(bot, ships[i]));
-        bot.ship.x = 100;
-        bot.ship.y = 300 * i;
+
+      var last = this.game.player.getShip();
+
+      for (var i = 0; i < 1000; i++) {
+        var bot = new Bot('bot', captains[i % 3], this.game);
+        bot.setShip(new Reaper(bot, ships[i % 3]));
+        bot.ship.x = i * 15;
+        bot.ship.y = i * 15;
 
         bot.ship.angle = 45;
 
-        bot.target(this.game.player.getShip());
+        bot.target(last);
+
+        last = bot.getShip();
 
         this.game.addCharacter(bot);
       }

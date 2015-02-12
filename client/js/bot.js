@@ -1,13 +1,12 @@
 define(['captain'], function(Captain) {
   var Bot = Captain.extend({
     tick: function() {
-      // this.accelerate();
       this.followTarget();
     },
 
     followTarget: function() {
-      // console.log(this.name + " is targeting " + this.target.name);
       this.turnToTarget();
+      this.accelerate();
     },
 
     turnToTarget: function() {
@@ -25,8 +24,6 @@ define(['captain'], function(Captain) {
       } else {
         this.turnLeft();
       }
-
-      this.accelerate();
     },
 
     doNothing: function() {
