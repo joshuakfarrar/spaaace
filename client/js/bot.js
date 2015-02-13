@@ -14,12 +14,22 @@ define(['captain'], function(Captain) {
 
       if (!this.target || !ship) return this.doNothing();
 
+      var normalizeAngle = function(angle) {
+        while (angle >= 180) {
+          angle -= 360;
+        }
+        while (angle < -180) {
+          angle += 360;
+        }
+        return angle;
+      }
+
       var dx = this.target.body.position.x - this.getShip().body.position.x;
       var dy = this.target.body.position.y - this.getShip().body.position.y;
 
       var angle = Math.atan2(dy, dx) * (180 / Math.PI);
 
-      if (angle > ship.angle) {
+      if (normalizeAngle(angle - ship.angle) > 0) {
         this.turnRight();
       } else {
         this.turnLeft();
