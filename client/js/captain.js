@@ -44,6 +44,12 @@ define(['ship', 'entity'], function(Ship, Entity) {
       }
     },
 
+    fireWeapon: function() {
+      if (this.hasShip()) {
+        this.ship.fireWeapon();
+      }
+    },
+
     hasShip: function() {
       return this.ship && this.ship.body
     },

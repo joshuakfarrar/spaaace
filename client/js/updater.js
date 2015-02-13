@@ -29,7 +29,7 @@ define(['keyboard'], function(Keyboard) {
       }
 
       if (this.game.input.isKeyDown(Keyboard.Space)) {
-        console.log("pew pew!");
+        this.player.fireWeapon();
       }
     },
 

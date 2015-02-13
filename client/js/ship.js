@@ -4,6 +4,20 @@ define(['entity', 'physics'], function(Entity) {
       this.name = name;
     },
 
+    fireWeapon: function() {
+      if (this.firing) return false;
+
+      var self = this;
+
+      this.firing = true;
+
+      console.log("pew!");
+
+      setTimeout(function() {
+        self.firing = false;
+      }, 100);
+    },
+
     getSpriteName: function() {
       return this.spriteName;
     },
