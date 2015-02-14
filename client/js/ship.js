@@ -28,6 +28,25 @@ define(['entity', 'physics'], function(Entity) {
       } else {
         return false;
       }
+    },
+
+    accelerate: function() {
+      if (this.body) {
+        this.body.acceleration.x = Math.cos(this.angle * (Math.PI / 180)) * this.ACCELERATION;
+        this.body.acceleration.y = Math.sin(this.angle * (Math.PI / 180)) * this.ACCELERATION;
+      }
+    },
+
+    rotateLeft: function() {
+      if (this.body) {
+        this.body.angularVelocity = -this.ROTATION_SPEED;
+      }
+    },
+
+    rotateRight: function() {
+      if (this.body) {
+        this.body.angularVelocity = this.ROTATION_SPEED;
+      }
     }
   });
 
