@@ -27,20 +27,19 @@ define(['ship', 'entity'], function(Ship, Entity) {
 
     accelerate: function() {
       if (this.hasShip()) {
-        this.ship.body.acceleration.x = Math.cos(this.ship.angle * (Math.PI / 180)) * this.ship.ACCELERATION;
-        this.ship.body.acceleration.y = Math.sin(this.ship.angle * (Math.PI / 180)) * this.ship.ACCELERATION;
+        this.ship.accelerate();
       }
     },
 
     turnLeft: function() {
       if (this.hasShip()) {
-        this.ship.body.angularVelocity = -this.ship.ROTATION_SPEED;
+        this.ship.rotateLeft();
       }
     },
 
     turnRight: function() {
       if (this.hasShip()) {
-        this.ship.body.angularVelocity = this.ship.ROTATION_SPEED;
+        this.ship.rotateRight();
       }
     },
 
