@@ -9,6 +9,11 @@ define(['ship', 'entity'], function(Ship, Entity) {
     setShip: function(ship) {
       if (ship instanceof Ship) {
         this.ship = ship;
+
+        this.ship.setFire(function() {
+          console.log("pew!");
+        });
+
         return true;
       } else {
         return false;

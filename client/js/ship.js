@@ -4,6 +4,10 @@ define(['entity', 'physics'], function(Entity) {
       this.name = name;
     },
 
+    setFire: function(fireCallback) {
+      this.fire = fireCallback;
+    },
+
     fireWeapon: function() {
       if (this.firing) return false;
 
@@ -11,7 +15,9 @@ define(['entity', 'physics'], function(Entity) {
 
       this.firing = true;
 
-      console.log("pew!");
+      if (this.fire) {
+        this.fire();
+      }
 
       setTimeout(function() {
         self.firing = false;
