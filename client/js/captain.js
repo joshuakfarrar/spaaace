@@ -8,10 +8,12 @@ define(['ship', 'entity'], function(Ship, Entity) {
 
     setShip: function(ship) {
       if (ship instanceof Ship) {
+        var self = this;
+
         this.ship = ship;
 
         this.ship.setFire(function() {
-          console.log("pew!");
+          self.game.addBullet(self);
         });
 
         return true;

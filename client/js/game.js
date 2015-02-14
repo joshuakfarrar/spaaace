@@ -1,5 +1,5 @@
-define(['renderer', 'updater', 'player', 'ships/reaper', 'planets/earth', 'sprite', 'entity', 'input', 'map', 'physics'],
- function(Renderer, Updater, Player, Reaper, Earth, Sprite, Entity, Input, Map, Physics) {
+define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/earth', 'sprite', 'entity', 'input', 'map', 'physics'],
+ function(Renderer, Updater, Player, Reaper, Bullet, Earth, Sprite, Entity, Input, Map, Physics) {
   var Game = Class.extend({
     init: function(app) {
       this.app = app;
@@ -96,6 +96,10 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'planets/earth', 'sprit
 
     addEntity: function(entity) {
       this.entities.push(entity);
+    },
+
+    addBullet: function(captain) {
+      var bullet = new Bullet();
     },
 
     addBot: function(bot) {
