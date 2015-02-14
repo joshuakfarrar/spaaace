@@ -9,6 +9,9 @@ define(['ship', 'entity'], function(Ship, Entity) {
     setShip: function(ship) {
       if (ship instanceof Ship) {
         this.ship = ship;
+        return true;
+      } else {
+        return false;
       }
     },
 
