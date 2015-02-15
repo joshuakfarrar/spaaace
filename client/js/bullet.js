@@ -15,9 +15,6 @@ define(['entity', 'vector'], function(Entity, Vector) {
     },
 
     setAngle: function(angle) {
-      var x = 1,
-          y = 1;
-
       var x = this.MAX_VELOCITY.x * Math.cos(angle * (Math.PI / 180)),
           y = this.MAX_VELOCITY.y * Math.sin(angle * (Math.PI / 180));
 
