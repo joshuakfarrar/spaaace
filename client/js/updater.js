@@ -1,4 +1,4 @@
-define(['keyboard'], function(Keyboard) {
+define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
   var Updater = Class.extend({
     init: function(game) {
       this.game = game;
@@ -8,7 +8,7 @@ define(['keyboard'], function(Keyboard) {
     update: function() {
       this.processInput();
       this.updateBots();
-      this.updateCharacters();
+      this.updatePhysics();
       this.updatePlayer();
       this.checkZones();
     },
@@ -41,7 +41,7 @@ define(['keyboard'], function(Keyboard) {
       });
     },
 
-    updateCharacters: function() {
+    updatePhysics: function() {
       this.game.forEachEntity(function(entity) {
         if (entity && entity.body) {
           entity.body.tick();

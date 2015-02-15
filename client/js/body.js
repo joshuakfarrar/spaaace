@@ -5,8 +5,8 @@ define(['point', 'vector'], function(Point, Vector) {
 
       this.position = this.entity.position || new Point(0, 0);
 
-      this.velocity = new Vector(0, 0);
-      this.acceleration = new Vector(0, 0);
+      this.velocity = this.entity.velocity || new Vector(0, 0);
+      this.acceleration = this.entity.acceleration || new Vector(0, 0);
 
       this.angularVelocity = 0;
     },
