@@ -21,7 +21,7 @@ define(['entity', 'physics'], function(Entity) {
 
       setTimeout(function() {
         self.firing = false;
-      }, 10);
+      }, 100);
     },
 
     isMoving: function() {

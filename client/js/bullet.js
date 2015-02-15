@@ -3,7 +3,7 @@ define(['entity', 'vector'], function(Entity, Vector) {
     init: function(id) {
       this._super(id);
 
-      this.MAX_VELOCITY = new Vector(3, 3);
+      this.MAX_VELOCITY = new Vector(5, 5);
 
       this.velocity = new Vector(0, 0);
 

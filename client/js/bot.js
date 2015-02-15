@@ -6,6 +6,7 @@ define(['captain'], function(Captain) {
 
     followTarget: function() {
       this.turnToTarget();
+      this.fireWeapon();
       this.accelerate();
     },
 
