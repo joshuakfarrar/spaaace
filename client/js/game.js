@@ -13,7 +13,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.entities = [];
       this.bots = [];
 
-      this.spriteNames = ["ship"];
+      this.spriteNames = ["ship", "ball"];
     },
 
     setup: function(canvas, background, foreground) {
@@ -100,6 +100,14 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
     addBullet: function(captain) {
       var bullet = new Bullet();
+      var position = captain.getGunPosition();
+
+      bullet.setPosition(captain.getGunPosition());
+      bullet.setAngle(captain.getAngle());
+      bullet.setSprite(this.sprites[bullet.getSpriteName()]);
+
+      this.physics.enable(bullet);
+      this.addEntity(bullet);
     },
 
     addBot: function(bot) {

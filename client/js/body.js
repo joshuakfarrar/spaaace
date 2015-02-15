@@ -1,14 +1,18 @@
-define(function() {
+define(['point', 'vector'], function(Point, Vector) {
   var Body = Class.extend({
     init: function(entity) {
       this.entity = entity;
 
-      this.position = { x: this.entity.x || 0, y: this.entity.y || 0 };
+      this.position = this.entity.position || new Point(0, 0);
 
-      this.velocity = { x: 0, y: 0 };
-      this.acceleration = { x: 0, y: 0 };
+      this.velocity = new Vector(0, 0);
+      this.acceleration = new Vector(0, 0);
 
       this.angularVelocity = 0;
+    },
+
+    getPosition: function() {
+      return this.position;
     },
 
     tick: function() {
@@ -17,8 +21,7 @@ define(function() {
       this.velocity.x = this.computeVelocity(this.velocity.x, this.acceleration.x, this.entity.MAX_VELOCITY.x);
       this.velocity.y = this.computeVelocity(this.velocity.y, this.acceleration.y, this.entity.MAX_VELOCITY.y);
 
-      this.position.x += this.velocity.x;
-      this.position.y += this.velocity.y;
+      this.position.move(this.velocity);
     },
 
     computeVelocity: function(velocity, acceleration, max) {
@@ -29,6 +32,10 @@ define(function() {
       }
 
       return velocity;
+    },
+
+    isInMotion: function() {
+      return this.acceleration.x || this.acceleration.y;
     }
   });
 

@@ -21,19 +21,24 @@ define(['entity', 'physics'], function(Entity) {
 
       setTimeout(function() {
         self.firing = false;
-      }, 100);
-    },
-
-    getSpriteName: function() {
-      return this.spriteName;
+      }, 0);
     },
 
     isMoving: function() {
-      if (this.body.acceleration.x || this.body.acceleration.y) {
-        return true;
-      } else {
-        return false;
+      if (this.body) {
+        return this.body.isInMotion();
       }
+      return false;
+    },
+
+    getPosition: function() {
+      if (this.body) {
+        return this.body.getPosition();
+      }
+    },
+
+    getGunPosition: function() {
+      throw new Error("No gun position defined!");
     },
 
     accelerate: function() {

@@ -1,4 +1,4 @@
-define(['areas/circular', 'bot', 'ships/reaper'], function(CircularArea, Bot, Reaper) {
+define(['areas/circular', 'bot', 'ships/reaper', 'point'], function(CircularArea, Bot, Reaper, Point) {
   var Planet = Class.extend({
     init: function(game, params) {
       this.game = game;
@@ -45,7 +45,7 @@ define(['areas/circular', 'bot', 'ships/reaper'], function(CircularArea, Bot, Re
 
         bot.setShip(new Reaper(bot, ships[i % 3]));
 
-        bot.ship.setPosition(x, y);
+        bot.ship.setPosition(new Point(x, y));
         bot.ship.setAngle(45);
 
         bot.target(last);

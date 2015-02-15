@@ -6,12 +6,6 @@ define(function() {
 
       this.filepath = "img/" + this.name + ".png";
 
-      this.offsetX = -16;
-      this.offsetY = -16;
-
-      this.width = 32;
-      this.height = 32;
-
       this.rotation = 0;
 
       this.load();

@@ -1,4 +1,4 @@
-define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
+define(['camera', 'map', 'ship', 'bullet'], function(Camera, Map, Ship, Bullet) {
   var Renderer = Class.extend({
     init: function(game, canvas, background, foreground) {
       this.game = game;
@@ -183,7 +183,7 @@ define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
       this.context.save();
         this.context.translate(this.canvas.width / 2, this.canvas.height / 2);
         this.context.rotate(angle * Math.PI/180);
-        this.context.drawImage(sprite.image, x, y, 32, 32, dx, dy, 32, 32);
+        this.context.drawImage(sprite.image, x, y, 32, 32, dx, dy, dw, dh);
       this.context.restore();
     },
 
@@ -221,7 +221,7 @@ define(['camera', 'map', 'ship'], function(Camera, Map, Ship) {
       this.spaceEntities.save();
         this.spaceEntities.translate(entity.body.position.x, entity.body.position.y);
         this.spaceEntities.rotate(angle * Math.PI/180);
-        this.spaceEntities.drawImage(sprite.image, Math.floor(x), Math.floor(y), 32, 32, dx, dy, 32, 32);
+        this.spaceEntities.drawImage(sprite.image, Math.floor(x), Math.floor(y), 32, 32, dx, dy, dw, dh);
       this.spaceEntities.restore();
     },
 

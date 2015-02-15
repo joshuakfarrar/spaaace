@@ -1,4 +1,4 @@
-define(['ship', 'entity'], function(Ship, Entity) {
+define(['ship', 'entity', 'point'], function(Ship, Entity, Point) {
   var Captain = Class.extend({
     init: function(id, name, game) {
       this.id = id;
@@ -61,15 +61,34 @@ define(['ship', 'entity'], function(Ship, Entity) {
     },
 
     getPosition: function() {
-      var position = (this.hasShip()) ? {
-        x: this.ship.body.position.x,
-        y: this.ship.body.position.y
-      } : {
-        x: 0,
-        y: 0
+      var position;
+
+      if (this.hasShip()) {
+        position = this.ship.getPosition();
+      } else {
+        position = new Point(0, 0);
       }
 
       return position;
+    },
+
+    getGunPosition: function() {
+      var position;
+
+      if (this.hasShip()) {
+        position = this.ship.getGunPosition();
+      } else {
+        position = new Point(0 , 0);
+      }
+
+      return position;
+    },
+
+    getAngle: function() {
+      if (this.hasShip()) {
+        return this.ship.angle;
+      }
+      return 0;
     }
   });
 
