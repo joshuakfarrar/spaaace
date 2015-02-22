@@ -30,6 +30,17 @@ define(['point'], function(Point) {
 
     setAngle: function(angle) {
       this.angle = angle;
+    },
+
+    getAngle: function() {
+      while (this.angle >= 180) {
+        this.angle -= 360;
+      }
+      while (this.angle < -180) {
+        this.angle += 360;
+      }
+
+      return this.angle;
     }
   });
 

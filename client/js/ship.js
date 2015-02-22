@@ -43,8 +43,9 @@ define(['entity', 'physics'], function(Entity) {
 
     accelerate: function() {
       if (this.body) {
-        this.body.acceleration.x = Math.cos(this.angle * (Math.PI / 180)) * this.ACCELERATION;
-        this.body.acceleration.y = Math.sin(this.angle * (Math.PI / 180)) * this.ACCELERATION;
+        var angle = this.getAngle();
+        this.body.acceleration.x = Math.cos(angle * (Math.PI / 180)) * this.ACCELERATION;
+        this.body.acceleration.y = Math.sin(angle * (Math.PI / 180)) * this.ACCELERATION;
       }
     },
 

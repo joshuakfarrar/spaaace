@@ -85,10 +85,9 @@ define(['ship', 'entity', 'point'], function(Ship, Entity, Point) {
     },
 
     getAngle: function() {
-      if (this.hasShip()) {
-        return this.ship.angle;
-      }
-      return 0;
+      var angle = (this.hasShip()) ? this.ship.getAngle() : 0;
+
+      return angle;
     }
   });
 
