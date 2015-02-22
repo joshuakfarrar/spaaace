@@ -94,10 +94,6 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       }
     },
 
-    addEntity: function(entity) {
-      this.entities.push(entity);
-    },
-
     addBullet: function(captain) {
       var bullet = new Bullet();
       var position = captain.getGunPosition();
@@ -112,6 +108,10 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
     addBot: function(bot) {
       this.bots.push(bot);
+    },
+
+    addEntity: function(entity) {
+      this.entities.push(entity);
     },
 
     forEachBot: function(callback) {
