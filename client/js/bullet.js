@@ -1,4 +1,4 @@
-define(['entity', 'vector'], function(Entity, Vector) {
+define(['entity', 'physics/vector'], function(Entity, Vector) {
   var Bullet = Entity.extend({
     init: function(id) {
       this._super(id);

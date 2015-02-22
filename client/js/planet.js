@@ -1,4 +1,4 @@
-define(['areas/circular', 'bot', 'ships/reaper', 'point'], function(CircularArea, Bot, Reaper, Point) {
+define(['areas/circular', 'bot', 'ships/reaper', 'physics/point'], function(CircularArea, Bot, Reaper, Point) {
   var Planet = Class.extend({
     init: function(game, params) {
       this.game = game;

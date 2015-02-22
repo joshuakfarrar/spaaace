@@ -9,7 +9,6 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
       this.processInput();
       this.updateBots();
       this.updatePhysics();
-      this.updatePlayer();
       this.checkZones();
     },
 
@@ -42,15 +41,7 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     },
 
     updatePhysics: function() {
-      this.game.forEachEntity(function(entity) {
-        if (entity && entity.body) {
-          entity.body.tick();
-        }
-      });
-    },
-
-    updatePlayer: function() {
-      this.game.player.ship.body.tick();
+      this.game.physics.step();
     },
 
     checkZones: function() {

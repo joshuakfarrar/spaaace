@@ -1,4 +1,4 @@
-define(['ship', 'point', 'vector'], function(Ship, Point, Vector) {
+define(['ship', 'physics/point', 'physics/vector'], function(Ship, Point, Vector) {
   var Reaper = Ship.extend({
     init: function(captain, name) {
       this._super(name);

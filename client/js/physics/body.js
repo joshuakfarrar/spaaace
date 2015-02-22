@@ -1,4 +1,4 @@
-define(['point', 'vector'], function(Point, Vector) {
+define(['physics/point', 'physics/vector'], function(Point, Vector) {
   var Body = Class.extend({
     init: function(entity) {
       this.entity = entity;

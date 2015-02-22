@@ -1,4 +1,4 @@
-define(['ship', 'entity', 'point'], function(Ship, Entity, Point) {
+define(['ship', 'entity', 'physics/point'], function(Ship, Entity, Point) {
   var Captain = Class.extend({
     init: function(id, name, game) {
       this.id = id;

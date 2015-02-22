@@ -1,11 +1,15 @@
-define(['body'], function(Body) {
+define(['physics/world'], function(World) {
   var Physics = Class.extend({
-    init: function(game) {
-      this.game = game;
+    init: function() {
+      this.world = new World();
     },
 
     enable: function(entity) {
-      entity.body = new Body(entity);
+      this.world.add(entity);
+    },
+
+    step: function() {
+      this.world.step();
     }
   });
 

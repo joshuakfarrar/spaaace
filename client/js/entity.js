@@ -1,4 +1,4 @@
-define(['point'], function(Point) {
+define(['physics/point'], function(Point) {
   var Entity = Class.extend({
     init: function(id) {
       this.id = id;
