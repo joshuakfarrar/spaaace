@@ -8,9 +8,11 @@ define(['physics/point', 'physics/vector'], function(Point, Vector) {
       this.acceleration = new Vector(0, 0);
 
       this.angularVelocity = 0;
+
       this.angle = 0;
 
-      this.maxSpeed = 2;
+      this.maxSpeed = 0;
+
       this.speed = 0;
 
       this.shapes = [];
