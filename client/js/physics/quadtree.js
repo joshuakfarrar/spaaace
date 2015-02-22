@@ -38,7 +38,7 @@ define(function() {
   var Node = Class.extend({
     init: function(bounds, depth) {
       this._MAX_DEPTH    = 8;
-      this._MAX_CHILDREN = 1;
+      this._MAX_CHILDREN = 2;
 
       this.TOP_LEFT      = 0;
       this.TOP_RIGHT     = 1;
