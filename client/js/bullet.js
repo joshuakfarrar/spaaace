@@ -4,8 +4,7 @@ define(['entity', 'physics/vector'], function(Entity, Vector) {
       this._super(id);
 
       this.MAX_VELOCITY = new Vector(6, 6);
-
-      this.velocity = new Vector(0, 0);
+      this.ACCELERATION = 2;
 
       this.spriteParams = {
         name: "ball",
@@ -14,11 +13,11 @@ define(['entity', 'physics/vector'], function(Entity, Vector) {
       };
     },
 
-    setAngle: function(angle) {
-      var x = this.MAX_VELOCITY.x * Math.cos(angle * (Math.PI / 180)),
-          y = this.MAX_VELOCITY.y * Math.sin(angle * (Math.PI / 180));
+    fire: function(angle, startingVelocity) {
+      var x = this.MAX_VELOCITY.x * Math.cos(angle * (Math.PI / 180)) + startingVelocity.x,
+          y = this.MAX_VELOCITY.y * Math.sin(angle * (Math.PI / 180)) + startingVelocity.y;
 
-      this.velocity = new Vector(x, y);
+      this.body.velocity = new Vector(x, y);
     }
   });
 

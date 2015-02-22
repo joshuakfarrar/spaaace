@@ -1,5 +1,5 @@
-define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/earth', 'sprite', 'entity', 'input', 'map', 'physics'],
- function(Renderer, Updater, Player, Reaper, Bullet, Earth, Sprite, Entity, Input, Map, Physics) {
+define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/earth', 'sprite', 'entity', 'input', 'map', 'physics', 'physics/body', 'physics/circle'],
+ function(Renderer, Updater, Player, Reaper, Bullet, Earth, Sprite, Entity, Input, Map, Physics, Body, Circle) {
   var Game = Class.extend({
     init: function(app) {
       this.app = app;
@@ -43,6 +43,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.setUpdater(new Updater(this));
       this.setInput(new Input(this));
       this.setPhysics(new Physics(this));
+
       this.camera = this.renderer.camera;
 
       var wait = setInterval(function() {
@@ -67,6 +68,14 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
     initPlayer: function() {
       if (this.player.setShip(new Reaper(this.player, "Kaylee"))) {
         this.player.ship.setSprite(this.sprites[this.player.ship.getSpriteName()]);
+
+        var body = new Body()
+          , circle = new Circle(this.player.ship.sprite.width / 2);
+
+        body.addShape(circle);
+        body.setMaxVelocity(this.player.ship.MAX_VELOCITY);
+
+        this.player.ship.setBody(body);
         this.physics.enable(this.player.ship); 
       }
     },
@@ -87,19 +96,28 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
     addCharacter: function(character) {
       if (character && character.ship) {
-        character.ship.setSprite(this.sprites[character.ship.getSpriteName()]);
-        this.physics.enable(character.ship);
-        this.addEntity(character.ship);
+        var ship = character.getShip();
+        ship.setSprite(this.sprites[character.ship.getSpriteName()]);
+
+        this.physics.enable(ship);
+        this.addEntity(ship);
         this.addBot(character);
       }
     },
 
     addBullet: function(captain) {
       var bullet = new Bullet();
-      var position = captain.getGunPosition();
+      var ship = captain.getShip();
 
-      bullet.setPosition(captain.getGunPosition());
-      bullet.setAngle(captain.getAngle());
+      var body = new Body();
+      var circle = new Circle(this.player.ship.sprite.width / 2);
+
+      body.addShape(circle);
+      body.setMaxVelocity(bullet.MAX_VELOCITY);
+
+      bullet.setBody(body);
+      bullet.setPosition(ship.getGunPosition());
+      bullet.fire(ship.getAngle(), ship.getVelocity());
       bullet.setSprite(this.sprites[bullet.getSpriteName()]);
 
       this.physics.enable(bullet);

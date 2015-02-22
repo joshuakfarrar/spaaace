@@ -6,7 +6,6 @@ define(['captain'], function(Captain) {
       } else {
         this.followTarget();
       }
-      
     },
 
     attackTarget: function() {
@@ -35,12 +34,12 @@ define(['captain'], function(Captain) {
         return angle;
       }
 
-      var dx = this.target.body.position.x - this.getShip().body.position.x;
-      var dy = this.target.body.position.y - this.getShip().body.position.y;
+      var dx = this.target.body.position.x - ship.body.position.x;
+      var dy = this.target.body.position.y - ship.body.position.y;
 
       var angle = Math.atan2(dy, dx) * (180 / Math.PI);
 
-      if (normalizeAngle(angle - ship.angle) > 0) {
+      if (normalizeAngle(angle - ship.getAngle()) > 0) {
         this.turnRight();
       } else {
         this.turnLeft();

@@ -1,25 +1,34 @@
 define(['physics/point', 'physics/vector'], function(Point, Vector) {
   var Body = Class.extend({
-    init: function(entity) {
-      this.entity = entity;
-
-      this.position = this.entity.position || new Point(0, 0);
-
-      this.velocity = this.entity.velocity || new Vector(0, 0);
-      this.acceleration = this.entity.acceleration || new Vector(0, 0);
-
+    init: function() {
+      this.position = new Point(0, 0);
+      this.velocity = new Vector(0, 0);
+      this.acceleration = new Vector(0, 0);
       this.angularVelocity = 0;
+      this.angle = 0;
+
+      this.maxVelocity = new Vector(1, 1);
+
+      this.shapes = [];
+    },
+
+    addShape: function(shape) {
+      this.shapes.push(shape);
     },
 
     getPosition: function() {
       return this.position;
     },
 
-    tick: function() {
-      this.entity.angle += this.angularVelocity;
+    setMaxVelocity: function(vector) {
+      this.maxVelocity = vector;
+    },
 
-      this.velocity.x = this.computeVelocity(this.velocity.x, this.acceleration.x, this.entity.MAX_VELOCITY.x);
-      this.velocity.y = this.computeVelocity(this.velocity.y, this.acceleration.y, this.entity.MAX_VELOCITY.y);
+    tick: function() {
+      this.angle += this.angularVelocity;
+
+      this.velocity.x = this.computeVelocity(this.velocity.x, this.acceleration.x, this.maxVelocity.x);
+      this.velocity.y = this.computeVelocity(this.velocity.y, this.acceleration.y, this.maxVelocity.y);
 
       this.position.move(this.velocity);
     },

@@ -7,8 +7,6 @@ define(['ship', 'physics/point', 'physics/vector'], function(Ship, Point, Vector
       this.ROTATION_SPEED = 2;
       this.ACCELERATION = .05;
 
-      this.angle = -90;
-
       this.spriteParams = {
         name: "ship",
         width: 32,
@@ -20,8 +18,8 @@ define(['ship', 'physics/point', 'physics/vector'], function(Ship, Point, Vector
     },
 
     getGunPosition: function() {
-      var x = this.body.position.x + (this.spriteParams.radius * Math.cos(this.angle * (Math.PI / 180))),
-          y = this.body.position.y + (this.spriteParams.radius * Math.sin(this.angle * (Math.PI / 180)));
+      var x = this.body.position.x + (this.spriteParams.radius * Math.cos(this.body.angle * (Math.PI / 180))),
+          y = this.body.position.y + (this.spriteParams.radius * Math.sin(this.body.angle * (Math.PI / 180)));
 
       return new Point(x, y);
     }

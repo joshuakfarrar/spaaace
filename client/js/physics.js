@@ -4,9 +4,14 @@ define(['physics/world', 'physics/body'], function(World, Body) {
       this.world = new World();
     },
 
-    enable: function(entity) {
+    attachBody: function(entity) {
       entity.body = new Body(entity);
-      this.world.addBody(entity.body);
+    },
+
+    enable: function(entity) {
+      if (entity && entity.body) {
+        this.world.addBody(entity.body);
+      }
     },
 
     step: function() {

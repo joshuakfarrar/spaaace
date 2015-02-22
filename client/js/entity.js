@@ -8,6 +8,10 @@ define(['physics/point'], function(Point) {
       this.sprite = null;
     },
 
+    setBody: function(body) {
+      this.body = body;
+    },
+
     setSprite: function(sprite) {
       this.sprite = sprite;
 
@@ -24,23 +28,29 @@ define(['physics/point'], function(Point) {
 
     setPosition: function(point) {
       if (point instanceof Point) {
-        this.position = point;
+        this.body.position = point;
       }
     },
 
     setAngle: function(angle) {
-      this.angle = angle;
+      this.body.angle = angle;
     },
 
     getAngle: function() {
-      while (this.angle >= 180) {
-        this.angle -= 360;
+      while (this.body.angle >= 180) {
+        this.body.angle -= 360;
       }
-      while (this.angle < -180) {
-        this.angle += 360;
+      while (this.body.angle < -180) {
+        this.body.angle += 360;
       }
 
-      return this.angle;
+      return this.body.angle;
+    },
+
+    getVelocity: function() {
+      if (this.body && this.body.velocity) {
+        return this.body.velocity;
+      }
     }
   });
 

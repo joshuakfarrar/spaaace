@@ -167,7 +167,7 @@ define(['camera', 'map', 'ship', 'bullet'], function(Camera, Map, Ship, Bullet) 
           ship = player.ship;
 
       var sprite = ship.sprite,
-          angle = ship.angle,
+          angle = ship.getAngle(),
           x = 0,
           y = 0,
           dx = sprite.offsetX,
@@ -205,7 +205,7 @@ define(['camera', 'map', 'ship', 'bullet'], function(Camera, Map, Ship, Bullet) 
       if (typeof entity === 'undefined') return false;
 
       var sprite = entity.sprite,
-          angle = entity.angle,
+          angle = entity.getAngle(),
           x = 0,
           y = 0,
           dx = sprite.offsetX,
