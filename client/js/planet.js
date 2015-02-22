@@ -50,6 +50,8 @@ define(['areas/circular', 'bot', 'ships/reaper', 'point'], function(CircularArea
 
         bot.target(last);
 
+        if (i % 2) bot.aggressive = true;
+
         last = bot.getShip();
 
         this.game.addCharacter(bot);
