@@ -15,6 +15,12 @@ define(function() {
     insert: function(item) {
       if (!item) return false;
 
+      // don't detect collisions for items out of bounds
+      if (item.position.x < this.root._bounds.x ||
+          item.position.y < this.root._bounds.y ||
+          item.position.x > this.root._bounds.width ||
+          item.position.y > this.root._bounds.height) return false;
+
       if (item instanceof Array) {
         for (var i = 0, len = item.length; i < len; i++) {
           this.root.insert(item[i]);
