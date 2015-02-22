@@ -3,7 +3,7 @@ define(['entity', 'physics/vector'], function(Entity, Vector) {
     init: function(id) {
       this._super(id);
 
-      this.MAX_VELOCITY = new Vector(6, 6);
+      this.MAX_SPEED = 6;
       this.ACCELERATION = 2;
 
       this.spriteParams = {
@@ -14,8 +14,8 @@ define(['entity', 'physics/vector'], function(Entity, Vector) {
     },
 
     fire: function(angle, startingVelocity) {
-      var x = this.MAX_VELOCITY.x * Math.cos(angle * (Math.PI / 180)) + startingVelocity.x,
-          y = this.MAX_VELOCITY.y * Math.sin(angle * (Math.PI / 180)) + startingVelocity.y;
+      var x = this.MAX_SPEED * Math.cos(angle * (Math.PI / 180)) + startingVelocity.x,
+          y = this.MAX_SPEED * Math.sin(angle * (Math.PI / 180)) + startingVelocity.y;
 
       this.body.velocity = new Vector(x, y);
     }

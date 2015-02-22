@@ -1,9 +1,9 @@
-define(['ship', 'physics/point', 'physics/vector'], function(Ship, Point, Vector) {
+define(['ship', 'physics/point'], function(Ship, Point) {
   var Reaper = Ship.extend({
     init: function(captain, name) {
       this._super(name);
 
-      this.MAX_VELOCITY = new Vector(2, 2);
+      this.MAX_SPEED = 3;
       this.ROTATION_SPEED = 2;
       this.ACCELERATION = .05;
 

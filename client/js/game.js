@@ -71,7 +71,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
           , circle = new Circle(this.player.ship.sprite.width / 2);
 
         body.addShape(circle);
-        body.setMaxVelocity(this.player.ship.MAX_VELOCITY);
+        body.setMaxSpeed(this.player.ship.MAX_SPEED);
 
         this.player.ship.setBody(body);
         this.physics.enable(this.player.ship); 
@@ -113,7 +113,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       var circle = new Circle(bullet.sprite.width / 2);
 
       body.addShape(circle);
-      body.setMaxVelocity(bullet.MAX_VELOCITY);
+      body.setMaxSpeed(bullet.MAX_SPEED);
 
       bullet.setBody(body);
       bullet.setPosition(ship.getGunPosition());

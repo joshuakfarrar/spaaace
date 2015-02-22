@@ -37,14 +37,14 @@ define(['areas/circular', 'bot', 'ships/reaper', 'physics/point', 'physics/body'
 
       var last = this.game.player.getShip();
 
-      for (var i = 0; i < 1; i++) {
+      for (var i = 0; i < 10; i++) {
         var x = (i % 32) * 32,
             y = i * (i % 32);
 
         var bot = new Bot('bot', captains[i % 3], this.game);
         var ship = new Reaper(bot, ships[i % 3]);
         var body = new Body();
-        body.setMaxVelocity(ship.MAX_VELOCITY);
+        body.setMaxSpeed(ship.MAX_SPEED);
 
         ship.setBody(body);
 
