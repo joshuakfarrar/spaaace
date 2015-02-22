@@ -1,4 +1,4 @@
-define(['camera', 'map', 'ship', 'bullet'], function(Camera, Map, Ship, Bullet) {
+define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
   var Renderer = Class.extend({
     init: function(game, canvas, background, foreground) {
       this.game = game;
@@ -21,12 +21,15 @@ define(['camera', 'map', 'ship', 'bullet'], function(Camera, Map, Ship, Bullet) 
       this.initFPS();
       this.tilesize = 16;
 
-      this.rescale();
-
       this.lastTime = new Date();
       this.frameCount = 0;
       this.maxFPS = this.FPS;
       this.realFPS = 0;
+
+      this.gridW = 30;
+      this.gridH = 14;
+
+      this.rescale();
     },
 
     initFPS: function() {
@@ -42,15 +45,8 @@ define(['camera', 'map', 'ship', 'bullet'], function(Camera, Map, Ship, Bullet) 
     },
 
     rescale: function() {
-      this.createCamera();
-    },
-
-    createCamera: function() {
-      this.camera = new Camera(this);
-      this.camera.rescale();
-  
-      this.canvas.width = this.camera.gridW * this.tilesize * 2;
-      this.canvas.height = this.camera.gridH * this.tilesize * 2;
+      this.canvas.width = this.gridW * this.tilesize * 2;
+      this.canvas.height = this.gridH * this.tilesize * 2;
   
       this.backcanvas.width = this.canvas.width;
       this.backcanvas.height = this.canvas.height;

@@ -44,8 +44,6 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.setInput(new Input(this));
       this.setPhysics(new Physics(this));
 
-      this.camera = this.renderer.camera;
-
       var wait = setInterval(function() {
         if (self.spritesLoaded()) {
 
