@@ -37,7 +37,7 @@ define(['areas/circular', 'bot', 'ships/reaper', 'physics/point', 'physics/body'
 
       var last = this.game.player.getShip();
 
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < 1; i++) {
         var x = (i % 32) * 32,
             y = i * (i % 32);
 

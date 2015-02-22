@@ -185,6 +185,7 @@ define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
 
     drawSpaceEntities: function(x, y) {
       this.clearScreen(this.spaceEntities);
+      this.drawQuadtree(this.game.physics.world.tree);
       this.drawEntities();
       this.renderEntities(x, y);
     },
@@ -238,6 +239,26 @@ define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
           height = this.canvas.height;
 
       this.background.drawImage(canvas, sx, sy, swidth, sheight, x, y, width, height);
+    },
+
+    drawQuadtree: function(tree) {
+      this.drawNode(tree.root);
+    },
+
+    drawNode: function(node) {
+      if (node.nodes.length) {
+        _.each(node.nodes, this.drawNode, this);
+      }
+
+      this.spaceEntities.save();
+        this.spaceEntities.strokeStyle = "#50b4a2";
+        this.spaceEntities.strokeRect(
+          node._bounds.x,
+          node._bounds.y,
+          node._bounds.width,
+          node._bounds.height
+        );
+      this.spaceEntities.restore();
     }
   });
 

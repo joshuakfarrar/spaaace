@@ -105,10 +105,12 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
     addBullet: function(captain) {
       var bullet = new Bullet();
+      bullet.setSprite(this.sprites[bullet.getSpriteName()]);
+
       var ship = captain.getShip();
 
       var body = new Body();
-      var circle = new Circle(this.player.ship.sprite.width / 2);
+      var circle = new Circle(bullet.sprite.width / 2);
 
       body.addShape(circle);
       body.setMaxVelocity(bullet.MAX_VELOCITY);

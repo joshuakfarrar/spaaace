@@ -1,11 +1,12 @@
-define(['physics/world', 'physics/body'], function(World, Body) {
+define(['physics/world', 'physics/rectangle', 'physics/body'], function(World, Rectangle, Body) {
   var Physics = Class.extend({
-    init: function() {
-      this.world = new World();
-    },
+    init: function(game) {
+      this.game = game;
 
-    attachBody: function(entity) {
-      entity.body = new Body(entity);
+      var canvas = this.game.renderer.spaceCanvas;
+      var bounds = new Rectangle(0, 0, canvas.width, canvas.height);
+
+      this.world = new World(bounds);
     },
 
     enable: function(entity) {
