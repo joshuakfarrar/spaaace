@@ -7,8 +7,8 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
 
     update: function() {
       this.processInput();
-      this.updateBots();
       this.updatePhysics();
+      this.updateBots();
       this.checkZones();
     },
 
