@@ -39,14 +39,12 @@ define(['physics/point', 'physics/vector', 'physics/circle'], function(Point, Ve
     tick: function() {
       this.angle += this.angularVelocity;
 
-      this.velocity.x = this.computeVelocity(this.velocity.x, this.acceleration.x);
-      this.velocity.y = this.computeVelocity(this.velocity.y, this.acceleration.y);
+      this.velocity.add(this.acceleration);
 
       this.speed = this.velocity.length();
 
       if (this.speed > this.maxSpeed) {
-        this.velocity.x *= this.maxSpeed/this.speed;
-        this.velocity.y *= this.maxSpeed/this.speed;
+        this.velocity.multiply(this.maxSpeed/this.speed);
       }
 
       this.position.move(this.velocity);
