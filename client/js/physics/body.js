@@ -56,6 +56,10 @@ define(['physics/point', 'physics/vector', 'physics/circle'], function(Point, Ve
       return this.speed;
     },
 
+    setVelocity: function(velocity) {
+      this.velocity = velocity;
+    },
+
     computeVelocity: function(velocity, acceleration) {
       velocity += acceleration;
 

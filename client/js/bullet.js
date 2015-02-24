@@ -19,7 +19,7 @@ define(['entity', 'physics/vector'], function(Entity, Vector) {
       var x = this.MAX_SPEED * Math.cos(angle * (Math.PI / 180)) + startingVelocity.x,
           y = this.MAX_SPEED * Math.sin(angle * (Math.PI / 180)) + startingVelocity.y;
 
-      this.body.velocity = new Vector(x, y);
+      this.body.setVelocity(new Vector(x, y));
 
       this.exists = true;
     }
