@@ -11,6 +11,8 @@ define(['entity', 'physics/vector'], function(Entity, Vector) {
         width: 4,
         height: 4
       };
+
+      this.exists = false;
     },
 
     fire: function(angle, startingVelocity) {
@@ -18,6 +20,8 @@ define(['entity', 'physics/vector'], function(Entity, Vector) {
           y = this.MAX_SPEED * Math.sin(angle * (Math.PI / 180)) + startingVelocity.y;
 
       this.body.velocity = new Vector(x, y);
+
+      this.exists = true;
     }
   });
 

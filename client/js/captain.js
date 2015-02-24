@@ -13,7 +13,7 @@ define(['ship', 'entity', 'physics/point'], function(Ship, Entity, Point) {
         this.ship = ship;
 
         this.ship.setFire(function() {
-          self.game.addBullet(self);
+          self.game.fireBullet(self);
         });
 
         return true;

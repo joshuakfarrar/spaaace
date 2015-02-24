@@ -1,5 +1,7 @@
-define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/earth', 'sprite', 'entity', 'input', 'map', 'physics', 'physics/body', 'physics/circle'],
- function(Renderer, Updater, Player, Reaper, Bullet, Earth, Sprite, Entity, Input, Map, Physics, Body, Circle) {
+define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/earth',
+  'sprite', 'entity', 'input', 'map', 'physics', 'bulletManager', 'physics/body', 'physics/circle'],
+ function(Renderer, Updater, Player, Reaper, Bullet, Earth,
+  Sprite, Entity, Input, Map, Physics, BulletManager, Body, Circle) {
   var Game = Class.extend({
     init: function(app) {
       this.app = app;
@@ -36,6 +38,10 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.physics = physics;
     },
 
+    setBulletManager: function(bullets) {
+      this.bullets = bullets;
+    },
+
     run: function() {
       var self = this;
 
@@ -43,12 +49,14 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.setUpdater(new Updater(this));
       this.setInput(new Input(this));
       this.setPhysics(new Physics(this));
+      this.setBulletManager(new BulletManager(this));
 
       var wait = setInterval(function() {
         if (self.spritesLoaded()) {
 
           self.initPlanets();
           self.initPlayer();
+          self.initBullets();
 
           if(self.hasNeverStarted) {
             self.started = true;
@@ -70,7 +78,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
         var body = new Body()
           , circle = new Circle(this.player.ship.sprite.width / 2);
 
-        body.addShape(circle);
+        body.setShape(circle);
         body.setMaxSpeed(this.player.ship.MAX_SPEED);
 
         this.player.ship.setBody(body);
@@ -92,6 +100,10 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.map.addPlanet(new Earth(this, earth));
     },
 
+    initBullets: function() {
+      this.bullets.initBulletSprites();
+    },
+
     addCharacter: function(character) {
       if (character && character.ship) {
         var ship = character.getShip();
@@ -99,7 +111,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
         ship.setSprite(this.sprites[character.ship.getSpriteName()]);
 
         var circle = new Circle(ship.sprite.width / 2);
-        ship.body.addShape(circle);
+        ship.body.setShape(circle);
 
         this.physics.enable(ship);
         this.addEntity(ship);
@@ -107,22 +119,21 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       }
     },
 
-    addBullet: function(captain) {
-      var bullet = new Bullet();
-      bullet.setSprite(this.sprites[bullet.getSpriteName()]);
-
+    fireBullet: function(captain) {
       var ship = captain.getShip();
 
-      var body = new Body();
-      var circle = new Circle(bullet.sprite.width / 2);
+      var bulletParams = {
+        position: ship.getGunPosition(),
+        angle: ship.getAngle(),
+        velocityOffset: ship.getVelocity()
+      };
 
-      body.addShape(circle);
-      body.setMaxSpeed(bullet.MAX_SPEED);
-
-      bullet.setBody(body);
-      bullet.setPosition(ship.getGunPosition());
-      bullet.fire(ship.getAngle(), ship.getVelocity());
-      bullet.setSprite(this.sprites[bullet.getSpriteName()]);
+      try {
+        var bullet = this.bullets.fire(bulletParams);
+      } catch (e) {
+        console.log(e.message);
+        return false;
+      }
 
       this.physics.enable(bullet);
       this.addEntity(bullet);

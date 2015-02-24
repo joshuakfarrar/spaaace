@@ -18,7 +18,7 @@ define(['physics/point', 'physics/vector', 'physics/circle'], function(Point, Ve
       this.shape;
     },
 
-    addShape: function(shape) {
+    setShape: function(shape) {
       this.shape = shape;
     },
 
