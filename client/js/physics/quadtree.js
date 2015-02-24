@@ -16,10 +16,7 @@ define(function() {
       if (!item) return false;
 
       // don't detect collisions for items out of bounds
-      if (item.position.x < this.root._bounds.x ||
-          item.position.y < this.root._bounds.y ||
-          item.position.x > this.root._bounds.width ||
-          item.position.y > this.root._bounds.height) return false;
+      if (this._outOfBounds(item)) return false;
 
       if (item instanceof Array) {
         for (var i = 0, len = item.length; i < len; i++) {
@@ -31,7 +28,18 @@ define(function() {
     },
 
     retrieve: function(item) {
-      this.root.retrieve(item);
+      if (this._outOfBounds(item)) return false;
+
+      return this.root.retrieve(item);
+    },
+
+    _outOfBounds: function(item) {
+      if (item.position.x < this.root._bounds.x ||
+          item.position.y < this.root._bounds.y ||
+          item.position.x > this.root._bounds.width ||
+          item.position.y > this.root._bounds.height) return true;
+
+        return false;
     }
   });
 
@@ -121,7 +129,6 @@ define(function() {
           width: b_w_h,
           height: b_h_h
       }, depth);
-
 
       //bottom right
       this.nodes[this.BOTTOM_RIGHT] = new Node({

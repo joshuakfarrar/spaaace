@@ -186,6 +186,7 @@ define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
     drawSpaceEntities: function(x, y) {
       this.clearScreen(this.spaceEntities);
       this.drawQuadtree(this.game.physics.world.tree);
+      this.drawBodies(this.game.physics.world.bodies);
       this.drawEntities();
       this.renderEntities(x, y);
     },
@@ -219,6 +220,24 @@ define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
         this.spaceEntities.translate(entity.body.position.x, entity.body.position.y);
         this.spaceEntities.rotate(angle * Math.PI/180);
         this.spaceEntities.drawImage(sprite.image, Math.floor(x), Math.floor(y), 32, 32, dx, dy, dw, dh);
+      this.spaceEntities.restore();
+    },
+
+    drawBodies: function(bodies) {
+      var self = this;
+
+      _.each(bodies, function(body) {
+        self.drawBody(body);
+      });
+    },
+
+    drawBody: function(body) {
+      this.spaceEntities.save();
+        this.spaceEntities.beginPath();
+        this.spaceEntities.arc(body.position.x, body.position.y, body.shape.radius, 0, 2 * Math.PI, false);
+        this.spaceEntities.lineWidth = 1;
+        this.spaceEntities.strokeStyle = "#ff00ff";
+        this.spaceEntities.stroke();
       this.spaceEntities.restore();
     },
 

@@ -1,4 +1,4 @@
-define(['physics/point', 'physics/vector'], function(Point, Vector) {
+define(['physics/point', 'physics/vector', 'physics/circle'], function(Point, Vector, Circle) {
   var Body = Class.extend({
     init: function() {
       this.position = new Point(0, 0);
@@ -15,11 +15,17 @@ define(['physics/point', 'physics/vector'], function(Point, Vector) {
 
       this.speed = 0;
 
-      this.shapes = [];
+      this.shape;
     },
 
     addShape: function(shape) {
-      this.shapes.push(shape);
+      this.shape = shape;
+    },
+
+    getBoundingRadius: function() {
+      if (this.shape && this.shape instanceof Circle) {
+        return this.shape.radius;
+      }
     },
 
     getPosition: function() {

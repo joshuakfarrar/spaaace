@@ -95,7 +95,11 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
     addCharacter: function(character) {
       if (character && character.ship) {
         var ship = character.getShip();
+
         ship.setSprite(this.sprites[character.ship.getSpriteName()]);
+
+        var circle = new Circle(ship.sprite.width / 2);
+        ship.body.addShape(circle);
 
         this.physics.enable(ship);
         this.addEntity(ship);

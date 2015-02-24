@@ -1,4 +1,4 @@
-define(['areas/circular', 'bot', 'ships/reaper', 'physics/point', 'physics/body'], function(CircularArea, Bot, Reaper, Point, Body) {
+define(['areas/circular', 'bot', 'ships/reaper', 'physics/point', 'physics/circle', 'physics/body'], function(CircularArea, Bot, Reaper, Point, Circle, Body) {
   var Planet = Class.extend({
     init: function(game, params) {
       this.game = game;
@@ -43,7 +43,9 @@ define(['areas/circular', 'bot', 'ships/reaper', 'physics/point', 'physics/body'
 
         var bot = new Bot('bot', captains[i % 3], this.game);
         var ship = new Reaper(bot, ships[i % 3]);
+
         var body = new Body();
+
         body.setMaxSpeed(ship.MAX_SPEED);
 
         ship.setBody(body);
@@ -55,7 +57,7 @@ define(['areas/circular', 'bot', 'ships/reaper', 'physics/point', 'physics/body'
 
         bot.target(last);
 
-        if (i % 2) bot.aggressive = true;
+        // if (i % 2) bot.aggressive = true;
 
         last = bot.getShip();
 

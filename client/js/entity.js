@@ -10,6 +10,7 @@ define(['physics/point'], function(Point) {
 
     setBody: function(body) {
       this.body = body;
+      this.body.entity = this;
     },
 
     setSprite: function(sprite) {

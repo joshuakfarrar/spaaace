@@ -11,7 +11,7 @@ define(['ship', 'physics/point'], function(Ship, Point) {
         name: "ship",
         width: 32,
         height: 32,
-        radius: 16
+        radius: 20
       };
 
       // console.log(captain.name + " is now commanding the Reaper-class ship '" + this.name + "'!");
