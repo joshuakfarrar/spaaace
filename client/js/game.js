@@ -144,7 +144,10 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
     },
 
     addEntity: function(entity) {
-      this.entities.push(entity);
+      if (!entity.added) {
+        this.entities.push(entity);
+        entity.added = true;
+      }
     },
 
     forEachBot: function(callback) {

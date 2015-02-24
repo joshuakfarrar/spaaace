@@ -10,6 +10,7 @@ define(['physics/quadtree'], function(Quadtree) {
 
     addBody: function(body) {
       this.bodies.push(body);
+      body.enabled = true;
     },
 
     step: function() {

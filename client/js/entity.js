@@ -6,6 +6,8 @@ define(['physics/point'], function(Point) {
       this.position = new Point(0, 0);
 
       this.sprite = null;
+
+      this.added = false;
     },
 
     setBody: function(body) {
