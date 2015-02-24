@@ -32,24 +32,23 @@ define(['areas/circular', 'bot', 'ships/reaper', 'physics/point', 'physics/circl
 
       console.log("Welcome to Planet " + this.name.substr(0, 1).toUpperCase() + this.name.substr(1) + ". Prepare to be slaughtered!");
 
-      var captains = ["April", "Thomas", "Mal"],
-          ships = ["The Warmies", "Swamp", "Serenity"];
+      var captains = ["April", "Thomas", "Mal", "Joshie", "Jack Sparrow"],
+          ships = ["The Coldies", "Swamp", "Serenity", "The Warmies", "The Black Pearl"];
 
       var last = this.game.player.getShip();
 
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < 5; i++) {
         var x = (i % 32) * 32,
             y = i * (i % 32);
 
-        var bot = new Bot('bot', captains[i % 3], this.game);
-        var ship = new Reaper(bot, ships[i % 3]);
+        var bot = new Bot('bot', captains[i % 5], this.game);
+        var ship = new Reaper(bot, ships[i % 5]);
 
         var body = new Body();
 
         body.setMaxSpeed(ship.MAX_SPEED);
 
         ship.setBody(body);
-
         ship.setPosition(new Point(x, y));
         ship.setAngle(45);
 
