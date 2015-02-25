@@ -7,6 +7,8 @@ define(['physics/point', 'physics/vector', 'physics/circle'], function(Point, Ve
 
       this.acceleration = new Vector(0, 0);
 
+      this.distance = new Vector(0, 0);
+
       this.angularVelocity = 0;
 
       this.angle = 0;
@@ -52,6 +54,12 @@ define(['physics/point', 'physics/vector', 'physics/circle'], function(Point, Ve
       }
 
       this.position.move(this.velocity);
+
+      this.distance.add(this.velocity);
+    },
+
+    distanceTraveled: function() {
+      return this.distance.length();
     },
 
     getSpeed: function() {

@@ -22,6 +22,7 @@ define(['entity', 'mortal', 'physics/vector'], function(Entity, Mortal, Vector) 
       this.setPosition(position);
 
       this.body.setVelocity(new Vector(x, y));
+      this.body.distance = new Vector(0, 0);
 
       this.exists = true;
     },
@@ -38,6 +39,18 @@ define(['entity', 'mortal', 'physics/vector'], function(Entity, Mortal, Vector) 
       mortal.damage();
 
       this.destroy();
+    },
+
+    tick: function() {
+      if (this.body.distanceTraveled() > 500) {
+        this.destroy();
+      }
+    },
+
+    destroy: function() {
+      this._super();
+
+      this.exists = false;
     }
   });
 

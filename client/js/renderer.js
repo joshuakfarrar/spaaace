@@ -187,8 +187,8 @@ define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
 
     drawSpaceEntities: function(x, y) {
       this.clearScreen(this.spaceEntities);
-      this.drawQuadtree(this.game.physics.world.tree);
-      this.drawBodies(this.game.physics.world.bodies);
+      // this.drawQuadtree(this.game.physics.world.tree);
+      // this.drawBodies(this.game.physics.world.bodies);
       this.drawEntities();
       this.renderEntities(x, y);
     },

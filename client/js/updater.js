@@ -8,8 +8,8 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     update: function() {
       this.processInput();
       this.updatePhysics();
-      this.cullEntities();
       this.updateBots();
+      this.cleanup();
       this.checkZones();
     },
 
@@ -33,8 +33,13 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
       }
     },
 
+    updatePhysics: function() {
+      this.game.physics.step();
+    },
+
     updateBots: function() {
       this.game.pruneBots();
+
       this.game.forEachBot(function(bot) {
         if (bot && bot.tick) {
           bot.tick();
@@ -42,12 +47,10 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
       });
     },
 
-    updatePhysics: function() {
-      this.game.physics.step();
-    },
-
-    cullEntities: function() {
+    cleanup: function() {
+      this.game.bullets.tick();
       this.game.pruneEntities();
+      this.game.physics.cullBodies();
     },
 
     checkZones: function() {

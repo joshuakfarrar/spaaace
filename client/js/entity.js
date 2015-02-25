@@ -15,7 +15,7 @@ define(['physics/point'], function(Point) {
     },
 
     handleCollision: function(entity) {
-      throw new Error("Entity hasn't been rigged to handle collissions.");
+      throw new Error("Entity hasn't been rigged to handle collisions.");
     },
 
     setBody: function(body) {

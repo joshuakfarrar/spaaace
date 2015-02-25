@@ -10,18 +10,10 @@ define(['physics/quadtree'], function(Quadtree) {
 
     addBody: function(body) {
       this.bodies.push(body);
-      body.enabled = true;
-    },
-
-    cullBodies: function() {
-      for (var i = this.bodies.length - 1; i !== 0; i--) {
-        if (this.bodies[i].enabled === false) {
-          this.bodies.splice(i, 1);
-        }
-      }
     },
 
     step: function() {
+
       // broad-phase collision detection
       this.tree.clear();
 
@@ -52,11 +44,9 @@ define(['physics/quadtree'], function(Quadtree) {
         }
       }
 
-      this.cullBodies();
-
-      _.each(this.bodies, function(body) {
-        body.tick();
-      });
+      for (var i = 0, len = this.bodies.length; i !== len; i++) {
+        this.bodies[i].tick();
+      }
     },
 
     boundingRadiusCheck: function(bodyA, bodyB) {
@@ -67,6 +57,14 @@ define(['physics/quadtree'], function(Quadtree) {
            r = bodyA.getBoundingRadius() + bodyB.getBoundingRadius();
 
       return d2 <= r * r;
+    },
+
+    cullBodies: function() {
+      for (var i = this.bodies.length - 1; i !== 0; i--) {
+        if (this.bodies[i].enabled === false) {
+          this.bodies.splice(i, 1);
+        }
+      }
     }
   });
 

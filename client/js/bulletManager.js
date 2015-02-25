@@ -4,7 +4,7 @@ define(['bullet', 'physics/body', 'physics/circle'], function(Bullet, Body, Circ
     init: function() {
       this.bullets = [];
 
-      for (var i = 0; i < 50; i++) {
+      for (var i = 0; i < 200; i++) {
         var bullet = new Bullet()
           , body = new Body();
 
@@ -29,6 +29,10 @@ define(['bullet', 'physics/body', 'physics/circle'], function(Bullet, Body, Circ
       return _.detect(this.bullets, function(bullet) { return bullet.exists == false; });
     },
 
+    getActiveBullets: function() {
+      return _.filter(this.bullets, function(bullet) { return bullet.exists == true; });
+    },
+
     fire: function(params) {
       var bullet = this.getAvailableBullet();
 
@@ -37,6 +41,13 @@ define(['bullet', 'physics/body', 'physics/circle'], function(Bullet, Body, Circ
       bullet.fire(params.position, params.angle, params.velocityOffset);
 
       return bullet;
+    },
+
+    tick: function() {
+      var bullets = this.getActiveBullets();
+      for (var i = 0, len = bullets.length; i < len; i++) {
+        bullets[i].tick();
+      }
     }
   });
 

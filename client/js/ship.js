@@ -14,7 +14,7 @@ define(['mortal', 'physics'], function(Mortal) {
     },
 
     fireWeapon: function() {
-      if (this.firing) return false;
+      if (this.firing || this.alive === false) return false;
 
       var self = this;
 

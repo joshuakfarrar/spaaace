@@ -13,6 +13,12 @@ define(['physics/world', 'physics/rectangle', 'physics/body'], function(World, R
       if (entity && entity.body && entity.body.enabled == false) {
         this.world.addBody(entity.body);
       }
+
+      entity.body.enabled = true;
+    },
+
+    cullBodies: function() {
+      this.world.cullBodies();
     },
 
     step: function() {

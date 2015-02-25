@@ -82,7 +82,6 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
         body.setMaxSpeed(this.player.ship.MAX_SPEED);
 
         this.player.ship.alive = true;
-
         this.player.ship.setBody(body);
         this.physics.enable(this.player.ship); 
       }
@@ -133,7 +132,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       try {
         var bullet = this.bullets.fire(bulletParams);
       } catch (e) {
-        console.log(e.message);
+        // console.log(e.message);
         return false;
       }
 
@@ -141,15 +140,15 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.addEntity(bullet);
     },
 
-    addBot: function(bot) {
-      this.bots.push(bot);
+    addEntity: function(entity) {
+      if (!entity.alive) {
+        entity.alive = true;
+        this.entities.push(entity);
+      }
     },
 
-    addEntity: function(entity) {
-      if (!entity.active) {
-        this.entities.push(entity);
-        entity.alive = true;
-      }
+    addBot: function(bot) {
+      this.bots.push(bot);
     },
 
     pruneEntities: function() {

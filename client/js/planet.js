@@ -38,8 +38,8 @@ define(['areas/circular', 'bot', 'ships/reaper', 'physics/point', 'physics/circl
       var last = this.game.player.getShip();
 
       for (var i = 0; i < 5; i++) {
-        var x = (i % 32) * 32,
-            y = i * (i % 32);
+        var x = (i + 1) * 100,
+            y = (i + 1) * 100;
 
         var bot = new Bot('bot', captains[i % 5], this.game);
         var ship = new Reaper(bot, ships[i % 5]);
@@ -56,7 +56,7 @@ define(['areas/circular', 'bot', 'ships/reaper', 'physics/point', 'physics/circl
 
         bot.target(last);
 
-        // if (i % 2) bot.aggressive = true;
+        if (i % 2) bot.aggressive = true;
 
         last = bot.getShip();
 
