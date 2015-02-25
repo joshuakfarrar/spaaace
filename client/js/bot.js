@@ -8,6 +8,10 @@ define(['captain'], function(Captain) {
       }
     },
 
+    onDestroy: function() {
+      console.log(this.name + ": I am undone!");
+    },
+
     attackTarget: function() {
       this.turnToTarget();
       this.fireWeapon();

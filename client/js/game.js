@@ -164,6 +164,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       for (var i = this.bots.length - 1; i >= 0; i--) {
         var ship = this.bots[i].getShip();
         if (ship && ship.alive === false) {
+          this.bots[i].onDestroy();
           this.bots.splice(i, 1);
         }
       }
