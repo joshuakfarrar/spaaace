@@ -49,7 +49,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.setUpdater(new Updater(this));
       this.setInput(new Input(this));
       this.setPhysics(new Physics(this));
-      this.setBulletManager(new BulletManager(this));
+      this.setBulletManager(new BulletManager());
 
       var wait = setInterval(function() {
         if (self.spritesLoaded()) {
@@ -81,6 +81,8 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
         body.setShape(circle);
         body.setMaxSpeed(this.player.ship.MAX_SPEED);
 
+        this.player.ship.alive = true;
+
         this.player.ship.setBody(body);
         this.physics.enable(this.player.ship); 
       }
@@ -101,7 +103,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
     },
 
     initBullets: function() {
-      this.bullets.initBulletSprites();
+      this.bullets.initBulletSprites(this.sprites);
     },
 
     addCharacter: function(character) {
@@ -144,9 +146,17 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
     },
 
     addEntity: function(entity) {
-      if (!entity.added) {
+      if (!entity.active) {
         this.entities.push(entity);
-        entity.added = true;
+        entity.alive = true;
+      }
+    },
+
+    pruneEntities: function() {
+      for (var i = this.entities.length - 1; i >= 0; i--) {
+        if (this.entities[i].alive === false) {
+          this.entities.splice(i, 1);
+        }
       }
     },
 

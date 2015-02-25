@@ -7,6 +7,8 @@ define(['ship', 'physics/point'], function(Ship, Point) {
       this.ROTATION_SPEED = 2;
       this.ACCELERATION = .05;
 
+      this.health = 10;
+
       this.spriteParams = {
         name: "ship",
         width: 32,
@@ -22,6 +24,10 @@ define(['ship', 'physics/point'], function(Ship, Point) {
           y = this.body.position.y + (this.spriteParams.radius * Math.sin(this.body.angle * (Math.PI / 180)));
 
       return new Point(x, y);
+    },
+
+    kill: function() {
+      this.destroy();
     }
   });
 

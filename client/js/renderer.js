@@ -162,6 +162,8 @@ define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
       var player = this.game.player,
           ship = player.ship;
 
+      if (!ship.alive) return false;
+
       var sprite = ship.sprite,
           angle = ship.getAngle(),
           x = 0,

@@ -1,11 +1,10 @@
+// http://www.photonstorm.com/flash-game-dev-tips/flash-game-dev-tip-3-bullet-manager-part-1
 define(['bullet', 'physics/body', 'physics/circle'], function(Bullet, Body, Circle) {
   var BulletManager = Class.extend({
-    init: function(game) {
-      this.game = game;
-
+    init: function() {
       this.bullets = [];
 
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < 50; i++) {
         var bullet = new Bullet()
           , body = new Body();
 
@@ -16,11 +15,9 @@ define(['bullet', 'physics/body', 'physics/circle'], function(Bullet, Body, Circ
       }
     },
 
-    initBulletSprites: function() {
-      var self = this;
-
+    initBulletSprites: function(sprites) {
       _.each(this.bullets, function(bullet) {
-        bullet.setSprite(self.game.sprites[bullet.getSpriteName()]);
+        bullet.setSprite(sprites[bullet.getSpriteName()]);
 
         var circle = new Circle(bullet.sprite.width / 2);
 
@@ -37,8 +34,7 @@ define(['bullet', 'physics/body', 'physics/circle'], function(Bullet, Body, Circ
 
       if (!bullet) throw new Error("No bullets available!");
 
-      bullet.setPosition(params.position);
-      bullet.fire(params.angle, params.velocityOffset);
+      bullet.fire(params.position, params.angle, params.velocityOffset);
 
       return bullet;
     }

@@ -7,7 +7,15 @@ define(['physics/point'], function(Point) {
 
       this.sprite = null;
 
-      this.added = false;
+      this.alive = false;
+    },
+
+    collision: function(entity) {
+      this.handleCollision(entity);
+    },
+
+    handleCollision: function(entity) {
+      throw new Error("Entity hasn't been rigged to handle collissions.");
     },
 
     setBody: function(body) {
@@ -54,6 +62,11 @@ define(['physics/point'], function(Point) {
       if (this.body && this.body.velocity) {
         return this.body.velocity;
       }
+    },
+
+    destroy: function() {
+      this.alive = false;
+      this.body.enabled = false;
     }
   });
 

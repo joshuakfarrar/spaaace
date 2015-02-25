@@ -39,6 +39,8 @@ define(['physics/point', 'physics/vector', 'physics/circle'], function(Point, Ve
     },
 
     tick: function() {
+      if (!this.enabled) return false;
+
       this.angle += this.angularVelocity;
 
       this.velocity.add(this.acceleration);

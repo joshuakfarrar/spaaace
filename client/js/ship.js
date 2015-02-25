@@ -1,7 +1,12 @@
-define(['entity', 'physics'], function(Entity) {
-  var Ship = Entity.extend({
-    init: function(name) {
+define(['mortal', 'physics'], function(Mortal) {
+  var Ship = Mortal.extend({
+    init: function(id, name) {
+      this._super(id);
+
       this.name = name;
+    },
+
+    handleCollision: function() {
     },
 
     setFire: function(fireCallback) {
@@ -59,6 +64,10 @@ define(['entity', 'physics'], function(Entity) {
       if (this.body) {
         this.body.angularVelocity = this.ROTATION_SPEED;
       }
+    },
+
+    kill: function() {
+      this.destroy();
     }
   });
 

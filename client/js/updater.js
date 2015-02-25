@@ -8,6 +8,7 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     update: function() {
       this.processInput();
       this.updatePhysics();
+      this.cullEntities();
       this.updateBots();
       this.checkZones();
     },
@@ -42,6 +43,10 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
 
     updatePhysics: function() {
       this.game.physics.step();
+    },
+
+    cullEntities: function() {
+      this.game.pruneEntities();
     },
 
     checkZones: function() {
