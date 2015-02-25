@@ -34,6 +34,7 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     },
 
     updateBots: function() {
+      this.game.pruneBots();
       this.game.forEachBot(function(bot) {
         if (bot && bot.tick) {
           bot.tick();

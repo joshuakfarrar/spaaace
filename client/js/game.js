@@ -160,6 +160,15 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       }
     },
 
+    pruneBots: function() {
+      for (var i = this.bots.length - 1; i >= 0; i--) {
+        var ship = this.bots[i].getShip();
+        if (ship && ship.alive === false) {
+          this.bots.splice(i, 1);
+        }
+      }
+    },
+
     forEachBot: function(callback) {
       _.each(this.bots, function(bot) {
         callback(bot);
