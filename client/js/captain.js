@@ -88,6 +88,37 @@ define(['ship', 'entity', 'physics/point'], function(Ship, Entity, Point) {
       var angle = (this.hasShip()) ? this.ship.getAngle() : 0;
 
       return angle;
+    },
+
+    turnToTarget: function() {
+      var ship = this.getShip();
+
+      if (!this.target || !ship) return this.doNothing();
+
+      var normalizeAngle = function(angle) {
+        while (angle >= 180) {
+          angle -= 360;
+        }
+        while (angle < -180) {
+          angle += 360;
+        }
+        return angle;
+      }
+
+      var dx = this.target.body.position.x - ship.body.position.x;
+      var dy = this.target.body.position.y - ship.body.position.y;
+
+      var angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+      if (normalizeAngle(angle - ship.getAngle()) > 0) {
+        this.turnRight();
+      } else {
+        this.turnLeft();
+      }
+    },
+
+    doNothing: function() {
+      return false;
     }
   });
 
