@@ -1,5 +1,14 @@
 define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mortal, Ship, Bullet) {
   var Renderer = Class.extend({
+    COLORS: {
+      RED:   "#ff0000",
+      GREEN: "#00ff00",
+      WHITE: "#ffffff",
+      BLACK: "#000000",
+      MAGENTA: "#ff00ff",
+      TEAL: "#50b4a2"
+    },
+
     init: function(game, canvas, background, foreground) {
       this.game = game;
       this.context = (canvas && canvas.getContext) ? canvas.getContext("2d") : null;
@@ -97,7 +106,7 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
           width = this.canvas.width,
           height = this.canvas.height;
 
-      this.drawBackground(this.background, "#000000");
+      this.drawBackground(this.background, this.COLORS.BLACK);
       this.background.drawImage(canvas, sx, sy, swidth, sheight, x, y, width, height);
     },
 
@@ -106,7 +115,7 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
 
       map.generateStars(this.spaceCanvas);
 
-      this.drawBackground(this.space, "#000000");
+      this.drawBackground(this.space, this.COLORS.BLACK);
       this.drawStars(map.stars);
       this.drawPlanets(map.planets);
     },
@@ -117,7 +126,7 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
 
     drawStar: function(star) {
       this.space.save();
-        this.space.fillStyle = "#ffffff";
+        this.space.fillStyle = this.COLORS.WHITE;
         this.space.fillRect(star.x, star.y, star.size, star.size);
       this.space.restore();
     },
@@ -127,13 +136,6 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
     },
 
     drawPlanet: function(planet) {
-      var colors = {
-        red:   "#ff0000",
-        green: "#00ff00",
-        white: "#ffffff",
-        black: "#000000"
-      }
-
       this.space.save();
         // this.space.beginPath();
         // this.space.strokeStyle = "#fafafa";
@@ -147,10 +149,10 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
         this.space.beginPath();
         this.space.arc(planet.area.x, planet.area.y, planet.area.radius, 0, 2 * Math.PI, false);
         this.space.lineWidth = 1;
-        this.space.strokeStyle = (planet.hostile) ? colors.red : colors.green;
+        this.space.strokeStyle = (planet.hostile) ? this.COLORS.RED : this.COLORS.GREEN;
         this.space.stroke();
 
-        this.space.fillStyle = colors.white;
+        this.space.fillStyle = this.COLORS.WHITE;
         this.space.beginPath();
         this.space.arc(planet.x, planet.y, planet.radius, 0, 2 * Math.PI, false);
         this.space.fill();
@@ -201,7 +203,7 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
         this.spaceEntities.beginPath();
         this.spaceEntities.moveTo(0, 0);
         this.spaceEntities.lineTo(width, 0);
-        this.spaceEntities.strokeStyle = '#ffffff'
+        this.spaceEntities.strokeStyle = this.COLORS.WHITE;
         this.spaceEntities.lineWidth = 2;
         this.spaceEntities.stroke();
       this.spaceEntities.restore();
@@ -244,7 +246,7 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
         this.spaceEntities.beginPath();
         this.spaceEntities.arc(body.position.x, body.position.y, body.shape.radius, 0, 2 * Math.PI, false);
         this.spaceEntities.lineWidth = 1;
-        this.spaceEntities.strokeStyle = "#ff00ff";
+        this.spaceEntities.strokeStyle = this.COLORS.MAGENTA;
         this.spaceEntities.stroke();
       this.spaceEntities.restore();
     },
@@ -278,7 +280,7 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
       }
 
       this.spaceEntities.save();
-        this.spaceEntities.strokeStyle = "#50b4a2";
+        this.spaceEntities.strokeStyle = this.COLORS.TEAL;
         this.spaceEntities.strokeRect(
           node._bounds.x,
           node._bounds.y,
