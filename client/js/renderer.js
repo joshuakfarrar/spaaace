@@ -1,4 +1,4 @@
-define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
+define(['map', 'mortal', 'ship', 'bullet'], function(Map, Mortal, Ship, Bullet) {
   var Renderer = Class.extend({
     init: function(game, canvas, background, foreground) {
       this.game = game;
@@ -160,7 +160,7 @@ define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
 
     drawPlayer: function() {
       var player = this.game.player,
-          ship = player.ship;
+          ship = player.getShip();
 
       if (!ship.alive) return false;
 
@@ -183,6 +183,18 @@ define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
         this.context.rotate(angle * Math.PI/180);
         this.context.drawImage(sprite.image, x, y, 32, 32, dx, dy, dw, dh);
       this.context.restore();
+
+      if (player instanceof Mortal) {
+        this.context.save();
+          this.context.translate(this.canvas.width / 2 + dx, this.canvas.height / 2 + dy * 2);
+          this.context.beginPath();
+          this.context.moveTo(0, 0);
+          this.context.lineTo(dw * (ship.health / ship.MAX_HEALTH), 0);
+          this.context.strokeStyle = '#ffffff'
+          this.context.lineWidth = 2;
+          this.context.stroke();
+        this.context.restore();
+      }
     },
 
     drawSpaceEntities: function(x, y) {
@@ -223,6 +235,18 @@ define(['map', 'ship', 'bullet'], function(Map, Ship, Bullet) {
         this.spaceEntities.rotate(angle * Math.PI/180);
         this.spaceEntities.drawImage(sprite.image, Math.floor(x), Math.floor(y), 32, 32, dx, dy, dw, dh);
       this.spaceEntities.restore();
+
+      if (entity instanceof Mortal) {
+        this.spaceEntities.save();
+          this.spaceEntities.translate(entity.body.position.x + dx, entity.body.position.y + dy * 2);
+          this.spaceEntities.beginPath();
+          this.spaceEntities.moveTo(0, 0);
+          this.spaceEntities.lineTo(dw * (entity.health / entity.MAX_HEALTH), 0);
+          this.spaceEntities.strokeStyle = '#ffffff'
+          this.spaceEntities.lineWidth = 2;
+          this.spaceEntities.stroke();
+        this.spaceEntities.restore();
+      }
     },
 
     drawBodies: function(bodies) {

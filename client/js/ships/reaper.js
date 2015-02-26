@@ -7,7 +7,8 @@ define(['ship', 'physics/point'], function(Ship, Point) {
       this.ROTATION_SPEED = 2;
       this.ACCELERATION = .05;
 
-      this.health = 10;
+      this.MAX_HEALTH = 50;
+      this.health = 50;
 
       this.spriteParams = {
         name: "ship",
