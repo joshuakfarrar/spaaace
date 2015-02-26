@@ -1,4 +1,4 @@
-define(['map', 'mortal', 'ship', 'bullet'], function(Map, Mortal, Ship, Bullet) {
+define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mortal, Ship, Bullet) {
   var Renderer = Class.extend({
     init: function(game, canvas, background, foreground) {
       this.game = game;
@@ -169,12 +169,46 @@ define(['map', 'mortal', 'ship', 'bullet'], function(Map, Mortal, Ship, Bullet) 
       var self = this;
 
       this.game.forEachEntity(function(entity) {
-        self.drawEntity(entity);
+        if (entity instanceof Mortal) {
+          self.drawMortal(entity);
+        } else {
+          self.drawEntity(entity);
+        }
       });
     },
 
+    drawMortal: function(mortal) {
+      if (!(mortal instanceof Mortal)) {
+        return false;
+      }
+
+      var sprite = mortal.sprite,
+        dx = sprite.offsetX,
+        dy = sprite.offsetY,
+        dw = sprite.width;
+
+      var x = mortal.body.position.x + dx,
+        y = mortal.body.position.y + dy * 2;
+        width = dw * (mortal.health / mortal.MAX_HEALTH);
+
+      this.drawHealthbar(x, y, width);
+      this.drawEntity(mortal);
+    },
+
+    drawHealthbar: function(x, y, width) {
+      this.spaceEntities.save();
+        this.spaceEntities.translate(x, y);
+        this.spaceEntities.beginPath();
+        this.spaceEntities.moveTo(0, 0);
+        this.spaceEntities.lineTo(width, 0);
+        this.spaceEntities.strokeStyle = '#ffffff'
+        this.spaceEntities.lineWidth = 2;
+        this.spaceEntities.stroke();
+      this.spaceEntities.restore();
+    },
+
     drawEntity: function(entity) {
-      if (typeof entity === 'undefined') return false;
+      if (typeof entity === 'undefined' || !(entity instanceof Entity)) return false;
 
       var sprite = entity.sprite,
           angle = entity.getAngle(),
@@ -195,18 +229,6 @@ define(['map', 'mortal', 'ship', 'bullet'], function(Map, Mortal, Ship, Bullet) 
         this.spaceEntities.rotate(angle * Math.PI/180);
         this.spaceEntities.drawImage(sprite.image, Math.floor(x), Math.floor(y), 32, 32, dx, dy, dw, dh);
       this.spaceEntities.restore();
-
-      if (entity instanceof Mortal) {
-        this.spaceEntities.save();
-          this.spaceEntities.translate(entity.body.position.x + dx, entity.body.position.y + dy * 2);
-          this.spaceEntities.beginPath();
-          this.spaceEntities.moveTo(0, 0);
-          this.spaceEntities.lineTo(dw * (entity.health / entity.MAX_HEALTH), 0);
-          this.spaceEntities.strokeStyle = '#ffffff'
-          this.spaceEntities.lineWidth = 2;
-          this.spaceEntities.stroke();
-        this.spaceEntities.restore();
-      }
     },
 
     drawBodies: function(bodies) {
