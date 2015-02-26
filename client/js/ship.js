@@ -4,6 +4,8 @@ define(['mortal', 'physics'], function(Mortal) {
       this._super(id);
 
       this.name = name;
+
+      this.health = this.MAX_HEALTH;
     },
 
     handleCollision: function() {

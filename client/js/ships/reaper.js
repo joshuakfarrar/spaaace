@@ -7,9 +7,6 @@ define(['ship', 'physics/point'], function(Ship, Point) {
       this.ROTATION_SPEED = 2;
       this.ACCELERATION = .05;
 
-      this.MAX_HEALTH = 50;
-      this.health = 50;
-
       this.spriteParams = {
         name: "ship",
         width: 32,
@@ -19,6 +16,8 @@ define(['ship', 'physics/point'], function(Ship, Point) {
 
       // console.log(captain.name + " is now commanding the Reaper-class ship '" + this.name + "'!");
     },
+
+    MAX_HEALTH: 50,
 
     getGunPosition: function() {
       var x = this.body.position.x + (this.spriteParams.radius * Math.cos(this.body.angle * (Math.PI / 180))),
