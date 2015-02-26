@@ -36,7 +36,8 @@ define(['entity', 'mortal', 'physics/vector'], function(Entity, Mortal, Vector) 
     hitMortal: function(mortal) {
       if (!mortal || !(mortal instanceof Mortal)) return false;
 
-      mortal.damage();
+      var damage = Math.floor(Math.random() * 4) + 1;
+      mortal.damage(damage);
 
       this.destroy();
     },

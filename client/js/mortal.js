@@ -4,8 +4,8 @@ define(['entity'], function(Entity) {
       this._super(id);
     },
 
-    damage: function() {
-      this.health -= 5;
+    damage: function(amount) {
+      this.health -= amount;
 
       if (this.health <= 0) {
         this.kill();
