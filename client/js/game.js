@@ -81,9 +81,10 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
         body.setShape(circle);
         body.setMaxSpeed(this.player.ship.MAX_SPEED);
 
-        this.player.ship.alive = true;
         this.player.ship.setBody(body);
-        this.physics.enable(this.player.ship); 
+
+        this.physics.enable(this.player.ship);
+        this.addEntity(this.player.ship); 
       }
     },
 

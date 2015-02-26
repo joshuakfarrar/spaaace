@@ -68,7 +68,6 @@ define(['map', 'mortal', 'ship', 'bullet'], function(Map, Mortal, Ship, Bullet) 
       this.clearScreen(this.context);
       this.drawSpace(player.x, player.y);
       this.drawSpaceEntities(player.x, player.y);
-      this.drawPlayer();
     },
 
     clearScreen: function(context) {
@@ -156,45 +155,6 @@ define(['map', 'mortal', 'ship', 'bullet'], function(Map, Mortal, Ship, Bullet) 
         this.space.arc(planet.x, planet.y, planet.radius, 0, 2 * Math.PI, false);
         this.space.fill();
       this.space.restore();
-    },
-
-    drawPlayer: function() {
-      var player = this.game.player,
-          ship = player.getShip();
-
-      if (!ship.alive) return false;
-
-      var sprite = ship.sprite,
-          angle = ship.getAngle(),
-          x = 0,
-          y = 0,
-          dx = sprite.offsetX,
-          dy = sprite.offsetY,
-          dw = sprite.width,
-          dh = sprite.height;
-
-      // this is totally a hack
-      if (ship.isMoving()) {
-        y = 32;
-      }
-
-      this.context.save();
-        this.context.translate(this.canvas.width / 2, this.canvas.height / 2);
-        this.context.rotate(angle * Math.PI/180);
-        this.context.drawImage(sprite.image, x, y, 32, 32, dx, dy, dw, dh);
-      this.context.restore();
-
-      if (player instanceof Mortal) {
-        this.context.save();
-          this.context.translate(this.canvas.width / 2 + dx, this.canvas.height / 2 + dy * 2);
-          this.context.beginPath();
-          this.context.moveTo(0, 0);
-          this.context.lineTo(dw * (ship.health / ship.MAX_HEALTH), 0);
-          this.context.strokeStyle = '#ffffff'
-          this.context.lineWidth = 2;
-          this.context.stroke();
-        this.context.restore();
-      }
     },
 
     drawSpaceEntities: function(x, y) {
