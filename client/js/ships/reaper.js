@@ -1,11 +1,13 @@
 define(['ship', 'physics/point'], function(Ship, Point) {
   var Reaper = Ship.extend({
+
+    ROTATION_SPEED: 2,
+    ACCELERATION: .05,
+    MAX_SPEED: 3,
+    MAX_HEALTH: 50,
+
     init: function(captain, name) {
       this._super(name);
-
-      this.MAX_SPEED = 3;
-      this.ROTATION_SPEED = 2;
-      this.ACCELERATION = .05;
 
       this.spriteParams = {
         name: "ship",
@@ -16,8 +18,6 @@ define(['ship', 'physics/point'], function(Ship, Point) {
 
       // console.log(captain.name + " is now commanding the Reaper-class ship '" + this.name + "'!");
     },
-
-    MAX_HEALTH: 50,
 
     getGunPosition: function() {
       var x = this.body.position.x + (this.spriteParams.radius * Math.cos(this.body.angle * (Math.PI / 180))),
