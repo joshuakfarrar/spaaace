@@ -196,7 +196,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
     },
 
     start: function() {
-      this.renderer.renderSpace();
+      this.renderer.drawSpace();
       this.tick();
       this.hasNeverStarted = false;
     },

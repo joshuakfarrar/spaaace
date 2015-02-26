@@ -74,8 +74,9 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
       var player = this.game.player.getPosition();
 
       this.clearScreen(this.context);
-      this.drawSpace(player.x, player.y);
-      this.drawSpaceEntities(player.x, player.y);
+      this.renderSpace(player.x, player.y);
+      this.drawSpaceEntities();
+      this.renderEntities(player.x, player.y);
     },
 
     clearScreen: function(context) {
@@ -89,7 +90,7 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
       context.restore();
     },
 
-    drawSpace: function(x, y) {
+    renderSpace: function(x, y) {
       var center = {
         x: x || 0,
         y: y || 0
@@ -109,7 +110,7 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
       this.background.drawImage(canvas, sx, sy, swidth, sheight, x, y, width, height);
     },
 
-    renderSpace: function() {
+    drawSpace: function() {
       var map = this.game.map;
 
       map.generateStars(this.spaceCanvas);
@@ -158,12 +159,11 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
       this.space.restore();
     },
 
-    drawSpaceEntities: function(x, y) {
+    drawSpaceEntities: function() {
       this.clearScreen(this.spaceEntities);
       // this.drawQuadtree(this.game.physics.world.tree);
       // this.drawBodies(this.game.physics.world.bodies);
       this.drawEntities();
-      this.renderEntities(x, y);
     },
 
     drawEntities: function() {
