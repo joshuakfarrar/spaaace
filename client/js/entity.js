@@ -66,7 +66,7 @@ define(['physics/point'], function(Point) {
 
     destroy: function() {
       this.alive = false;
-      this.body.enabled = false;
+      this.body.active = false;
     }
   });
 

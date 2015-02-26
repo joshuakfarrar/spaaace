@@ -9,24 +9,30 @@ define(['physics/quadtree'], function(Quadtree) {
     },
 
     addBody: function(body) {
+      body.active = true;
       this.bodies.push(body);
     },
 
+    getActiveBodies: function() {
+      return _.select(this.bodies, function(body) { return body.active === true; });
+    },
+
     step: function() {
+      var bodies = this.getActiveBodies();
 
       // broad-phase collision detection
       this.tree.clear();
 
-      for (var i = 0, len = this.bodies.length; i !== len; i++) {
-        var body = this.bodies[i];
+      for (var i = 0, len = bodies.length; i !== len; i++) {
+        var body = bodies[i];
 
         this.tree.insert(body);
       }
 
       this.collidingBodies.length = 0;
 
-      for (var i = 0, len = this.bodies.length; i !== len; i++) {
-        var bodyA = this.bodies[i];
+      for (var i = 0, len = bodies.length; i !== len; i++) {
+        var bodyA = bodies[i];
 
         var siblings = this.tree.retrieve(bodyA) || [];
 
@@ -44,9 +50,11 @@ define(['physics/quadtree'], function(Quadtree) {
         }
       }
 
-      for (var i = 0, len = this.bodies.length; i !== len; i++) {
-        this.bodies[i].tick();
+      for (var i = 0, len = bodies.length; i !== len; i++) {
+        bodies[i].tick();
       }
+
+      this.cullBodies();
     },
 
     boundingRadiusCheck: function(bodyA, bodyB) {
@@ -61,7 +69,7 @@ define(['physics/quadtree'], function(Quadtree) {
 
     cullBodies: function() {
       for (var i = this.bodies.length - 1; i !== 0; i--) {
-        if (this.bodies[i].enabled === false) {
+        if (this.bodies[i].active === false) {
           this.bodies.splice(i, 1);
         }
       }

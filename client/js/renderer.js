@@ -68,7 +68,6 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
 
       this.spaceEntitiesCanvas.width = this.canvas.width * 7;
       this.spaceEntitiesCanvas.height = this.canvas.height * 7;
-
     },
 
     renderFrame: function() {

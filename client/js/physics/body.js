@@ -19,7 +19,7 @@ define(['physics/point', 'physics/vector', 'physics/circle'], function(Point, Ve
 
       this.shape;
 
-      this.enabled = false;
+      this.active = false;
     },
 
     setShape: function(shape) {
@@ -41,7 +41,7 @@ define(['physics/point', 'physics/vector', 'physics/circle'], function(Point, Ve
     },
 
     tick: function() {
-      if (!this.enabled) return false;
+      if (!this.active) return false;
 
       this.angle += this.angularVelocity;
 

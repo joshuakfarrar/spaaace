@@ -34,6 +34,7 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     },
 
     updatePhysics: function() {
+      this.game.bullets.tick();
       this.game.physics.step();
     },
 
@@ -48,9 +49,7 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     },
 
     cleanup: function() {
-      this.game.bullets.tick();
       this.game.pruneEntities();
-      this.game.physics.cullBodies();
     },
 
     checkZones: function() {
