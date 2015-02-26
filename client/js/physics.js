@@ -15,10 +15,6 @@ define(['physics/world', 'physics/rectangle', 'physics/body'], function(World, R
       }
     },
 
-    cullBodies: function() {
-      this.world.cullBodies();
-    },
-
     step: function() {
       this.world.step();
     }
