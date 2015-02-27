@@ -1,5 +1,4 @@
 var express = require('express');
-var router = express.Router();
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -15,12 +14,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client')));
-
-router.get('/', function(req, res) {
-  res.render('index', { title: 'Express' });
-});
-
-app.use('/', router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
