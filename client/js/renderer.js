@@ -107,6 +107,10 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
           height = this.canvas.height;
 
       this.drawBackground(this.background, this.COLORS.BLACK);
+
+      sx = (sx < 0) ? 0 : sx;
+      sy = (sy < 0) ? 0 : sy;
+
       this.background.drawImage(canvas, sx, sy, swidth, sheight, x, y, width, height);
     },
 
@@ -265,6 +269,9 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
           y = 0,
           width = this.canvas.width,
           height = this.canvas.height;
+
+      sx = (sx < 0) ? 0 : sx;
+      sy = (sy < 0) ? 0 : sy;
 
       this.background.drawImage(canvas, sx, sy, swidth, sheight, x, y, width, height);
     },
