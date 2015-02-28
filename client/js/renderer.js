@@ -56,10 +56,10 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
     rescale: function() {
       this.canvas.width = this.gridW * this.tilesize * 2;
       this.canvas.height = this.gridH * this.tilesize * 2;
-  
+
       this.backcanvas.width = this.canvas.width;
       this.backcanvas.height = this.canvas.height;
-  
+
       this.forecanvas.width = this.canvas.width;
       this.forecanvas.height = this.canvas.height;
 
@@ -189,6 +189,8 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
         return false;
       }
 
+      var health_percent = mortal.health / mortal.MAX_HEALTH;
+
       var sprite = mortal.sprite,
         dx = sprite.offsetX,
         dy = sprite.offsetY,
@@ -196,10 +198,14 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
 
       var x = mortal.body.position.x + dx,
         y = mortal.body.position.y + dy * 2;
-        width = dw * (mortal.health / mortal.MAX_HEALTH);
+        width = dw * health_percent;
 
-      this.drawHealthbar(x, y, width);
-      this.drawEntity(mortal);
+      if (health_percent == 1) {
+        this.drawEntity(mortal);
+      } else {
+        this.drawHealthbar(x, y, width);
+        this.drawEntity(mortal);
+      }
     },
 
     drawHealthbar: function(x, y, width) {
