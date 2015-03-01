@@ -17,7 +17,7 @@ define(['entity'], function(Entity) {
     },
 
     atFullHealth: function() {
-      return this.getHealthAsPercent() == 100;
+      return this.health == this.MAX_HEALTH;
     }
   });
 
