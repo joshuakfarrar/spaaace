@@ -10,6 +10,14 @@ define(['entity'], function(Entity) {
       if (this.health <= 0) {
         this.kill();
       }
+    },
+
+    getHealthAsPercent: function() {
+      return (this.health / this.MAX_HEALTH).toFixed(2) * 100;
+    },
+
+    atFullHealth: function() {
+      return this.getHealthAsPercent() == 100;
     }
   });
 

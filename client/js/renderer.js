@@ -189,6 +189,14 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
         return false;
       }
 
+      if (!mortal.atFullHealth()) {
+        this.drawHealthbar(mortal);
+      }
+
+      this.drawEntity(mortal);
+    },
+
+    drawHealthbar: function(mortal) {
       var sprite = mortal.sprite,
         dx = sprite.offsetX,
         dy = sprite.offsetY,
@@ -196,13 +204,8 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
 
       var x = mortal.body.position.x + dx,
         y = mortal.body.position.y + dy * 2;
-        width = dw * (mortal.health / mortal.MAX_HEALTH);
+        width = dw * mortal.getHealthAsPercent() / 100;
 
-      this.drawHealthbar(x, y, width);
-      this.drawEntity(mortal);
-    },
-
-    drawHealthbar: function(x, y, width) {
       this.spaceEntities.save();
         this.spaceEntities.translate(x, y);
         this.spaceEntities.beginPath();
