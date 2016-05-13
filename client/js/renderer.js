@@ -55,7 +55,6 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       camera.lookAt(this.game.player);
       this.camera = camera;
 
-
       document.getElementById('canvas').appendChild(this.renderer.view);
     },
 
@@ -85,7 +84,9 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       map.generateStarfield(this.MAX_WIDTH, this.MAX_HEIGHT);
 
       this.drawStars(map.stars);
-      this.stage.addChild(this.graphics);
+
+      var sprite = new PIXI.Sprite(this.graphics.generateTexture());
+      this.stage.addChild(sprite);
       this.stage.addChild(this.ui);
     },
 
@@ -105,13 +106,13 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
 
     drawPlanet: function(planet) {
       var color = (planet.hostile) ? 0xff0000 : 0x00ff00;
-      this.graphics.lineStyle(1, color);
-      this.graphics.drawCircle(planet.x, planet.y, planet.area.radius);
-      this.graphics.lineStyle(0);
+      this.ui.lineStyle(1, color);
+      this.ui.drawCircle(planet.x, planet.y, planet.area.radius);
+      this.ui.lineStyle(0);
 
-      this.graphics.beginFill(0xffffff);
-      this.graphics.drawCircle(planet.x, planet.y, planet.radius);
-      this.graphics.endFill();
+      this.ui.beginFill(0xffffff);
+      this.ui.drawCircle(planet.x, planet.y, planet.radius);
+      this.ui.endFill();
     },
 
     drawSpaceEntities: function() {
