@@ -1,21 +1,24 @@
 define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/earth',
-  'sprite', 'entity', 'input', 'map', 'physics', 'bulletManager', 'physics/body', 'physics/circle'],
+  'sprite', 'entity', 'input', 'map', 'physics', 'bulletManager', 'physics/body', 'physics/circle', 'physics/point'],
  function(Renderer, Updater, Player, Reaper, Bullet, Earth,
-  Sprite, Entity, Input, Map, Physics, BulletManager, Body, Circle) {
+  Sprite, Entity, Input, Map, Physics, BulletManager, Body, Circle, Point) {
   var Game = Class.extend({
     init: function(app) {
       this.app = app;
       this.ready = false;
       this.started = false;
       this.hasNeverStarted = true;
- 
+
       this.player = new Player("player", "Joshua", this);
 
       this.sprites = {};
       this.entities = [];
       this.bots = [];
 
-      this.spriteNames = ["ship", "ball"];
+      this.MAX_WIDTH = 10080;
+      this.MAX_HEIGHT = 10080;
+
+      this.spriteNames = ["ship.old", "ball"];
     },
 
     setup: function(canvas, background, foreground) {
@@ -42,7 +45,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.bullets = bullets;
     },
 
-    run: function() {
+    run: function(data) {
       var self = this;
 
       this.loadSprites();
@@ -55,7 +58,9 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
         if (self.spritesLoaded()) {
 
           self.initPlanets();
-          self.initPlayer();
+          self.initPlayer({
+            spawn: new Point(data.player.spawn.x, data.player.spawn.y)
+          });
           self.initBullets();
 
           if(self.hasNeverStarted) {
@@ -71,7 +76,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.map = new Map(this);
     },
 
-    initPlayer: function() {
+    initPlayer: function(player) {
       if (this.player.setShip(new Reaper(this.player, "Kaylee"))) {
         this.player.ship.setSprite(this.sprites[this.player.ship.getSpriteName()]);
 
@@ -83,8 +88,10 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
         this.player.ship.setBody(body);
 
+        this.player.ship.setPosition(player.spawn);
+
         this.physics.enable(this.player.ship);
-        this.addEntity(this.player.ship); 
+        this.addEntity(this.player.ship);
       }
     },
 

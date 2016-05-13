@@ -1,4 +1,4 @@
-define(['mortal', 'physics'], function(Mortal) {
+define(['mortal', 'physics/point'], function(Mortal, Point) {
   var Ship = Mortal.extend({
     init: function(id, name) {
       this._super(id);
@@ -38,9 +38,26 @@ define(['mortal', 'physics'], function(Mortal) {
       return false;
     },
 
+    // pixi
+    getPose: function() {
+      if (this.isMoving()) {
+        return 'ship/active.png';
+      } else {
+        return 'ship/inactive.png';
+      }
+    },
+    // end pixi
+
     getPosition: function() {
       if (this.body) {
         return this.body.getPosition();
+      }
+    },
+
+    setPosition: function(position) {
+      if (! position instanceof Point) return false;
+      if (this.body) {
+        this.body.position = position;
       }
     },
 

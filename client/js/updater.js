@@ -6,10 +6,10 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     },
 
     update: function() {
+      this.cleanup();
       this.processInput();
       this.updatePhysics();
       this.updateBots();
-      this.cleanup();
       this.checkZones();
     },
 

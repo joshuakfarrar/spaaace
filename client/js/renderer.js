@@ -1,34 +1,23 @@
-define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mortal, Ship, Bullet) {
+define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], function(Screen, Camera, Map, Entity, Mortal, Ship, Bullet) {
   var Renderer = Class.extend({
-    COLORS: {
-      RED:   "#ff0000",
-      GREEN: "#00ff00",
-      WHITE: "#ffffff",
-      BLACK: "#000000",
-      MAGENTA: "#ff00ff",
-      TEAL: "#50b4a2"
-    },
+    // COLORS: {
+    //   RED:   "#ad1e34",
+    //   GREEN: "#5aa58c",
+    //   WHITE: "#ffffff",
+    //   BLACK: "#1b1824",
+    //   MAGENTA: "#ff00ff",
+    //   TEAL: "#50b4a2"
+    // },
 
     init: function(game, canvas, background, foreground) {
       this.game = game;
-      this.context = (canvas && canvas.getContext) ? canvas.getContext("2d") : null;
-      this.background = (background && background.getContext) ? background.getContext("2d") : null;
-      this.foreground = (foreground && foreground.getContext) ? foreground.getContext("2d") : null;
-
-      this.canvas = canvas;
-      this.backcanvas = background;
-      this.forecanvas = foreground;
-
-      this.spaceCanvas = document.createElement('canvas');
-      this.space = (this.spaceCanvas && this.spaceCanvas.getContext) ? this.spaceCanvas.getContext("2d") : null;
-
-      this.spaceEntitiesCanvas = document.createElement('canvas');
-      this.spaceEntities = (this.spaceEntitiesCanvas && this.spaceEntitiesCanvas.getContext) ? this.spaceEntitiesCanvas.getContext("2d") : null;
 
       this.map = new Map(this);
 
       this.initFPS();
-      this.tilesize = 16;
+
+      this.MAX_WIDTH = game.MAX_WIDTH;
+      this.MAX_HEIGHT = game.MAX_HEIGHT;
 
       this.lastTime = new Date();
       this.frameCount = 0;
@@ -37,93 +26,67 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
 
       this.gridW = 30;
       this.gridH = 14;
+      this.tilesize = 16;
 
-      this.rescale();
+      var width = this.gridW * this.tilesize * 3;
+      var height = this.gridH * this.tilesize * 3.5
+
+      var screen = new Screen(width, height);
+      this.screen = screen;
+
+      this.renderer = new PIXI.autoDetectRenderer(screen.width, screen.height, {
+        backgroundColor: 0x1b1824,
+        antialias: true
+      });
+      this.graphics = new PIXI.Graphics();
+      this.ui = new PIXI.Graphics();
+      this.stage = new PIXI.Container();
+
+      this.loader = PIXI.loader;
+      this.loader.add('ship', '/img/ship.json');
+      this.loader.add('bullet', '/img/ball.png');
+      var self = this;
+      this.loader.once('complete', function() {
+        self.sprite = PIXI.Sprite.fromFrame('ship/inactive.png');
+      });
+      this.loader.load();
+
+      var camera = new Camera(this);
+      camera.lookAt(this.game.player);
+      this.camera = camera;
+
+
+      document.getElementById('canvas').appendChild(this.renderer.view);
     },
 
     initFPS: function() {
       this.FPS = 50;
     },
 
-    getWidth: function() {
-      return this.canvas.width;
-    },
-
-    getHeight: function() {
-      return this.canvas.height;
-    },
-
-    rescale: function() {
-      this.canvas.width = this.gridW * this.tilesize * 2;
-      this.canvas.height = this.gridH * this.tilesize * 2;
-  
-      this.backcanvas.width = this.canvas.width;
-      this.backcanvas.height = this.canvas.height;
-  
-      this.forecanvas.width = this.canvas.width;
-      this.forecanvas.height = this.canvas.height;
-
-      this.spaceCanvas.width = this.canvas.width * 7;
-      this.spaceCanvas.height = this.canvas.height * 7;
-
-      this.spaceEntitiesCanvas.width = this.canvas.width * 7;
-      this.spaceEntitiesCanvas.height = this.canvas.height * 7;
+    getScreen: function() {
+      return this.screen;
     },
 
     renderFrame: function() {
       var player = this.game.player.getPosition();
 
-      this.clearScreen(this.context);
-      this.renderSpace(player.x, player.y);
+      this.ui.clear();
       this.drawSpaceEntities();
-      this.renderEntities(player.x, player.y);
-    },
+      this.renderer.render(this.stage);
 
-    clearScreen: function(context) {
-      context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-    },
-
-    drawBackground: function(context, color) {
-      context.save();
-        context.fillStyle = color;
-        context.fillRect(0, 0, this.spaceCanvas.width, this.spaceCanvas.height);
-      context.restore();
-    },
-
-    renderSpace: function(x, y) {
-      var center = {
-        x: x || 0,
-        y: y || 0
-      }
-
-      var canvas = this.spaceCanvas,
-          sx = center.x - this.canvas.width / 2,
-          sy = center.y - this.canvas.height / 2,
-          swidth = this.canvas.width,
-          sheight = this.canvas.height,
-          x = 0,
-          y = 0,
-          width = this.canvas.width,
-          height = this.canvas.height;
-
-      this.drawBackground(this.background, this.COLORS.BLACK);
-
-      sx = (sx < 0) ? 0 : sx;
-      sx = (sx > canvas.width - this.canvas.width) ? canvas.width - this.canvas.width : sx;
-      sy = (sy < 0) ? 0 : sy;
-      sy = (sy > canvas.height - this.canvas.height) ? canvas.height - this.canvas.height : sy;
-
-      this.background.drawImage(canvas, sx, sy, swidth, sheight, x, y, width, height);
+      var focus = this.camera.getFocus();
+      this.stage.position.x = focus.x;
+      this.stage.position.y = focus.y;
     },
 
     drawSpace: function() {
       var map = this.game.map;
 
-      map.generateStars(this.spaceCanvas);
+      map.generateStarfield(this.MAX_WIDTH, this.MAX_HEIGHT);
 
-      this.drawBackground(this.space, this.COLORS.BLACK);
       this.drawStars(map.stars);
-      this.drawPlanets(map.planets);
+      this.stage.addChild(this.graphics);
+      this.stage.addChild(this.ui);
     },
 
     drawStars: function(stars) {
@@ -131,10 +94,9 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
     },
 
     drawStar: function(star) {
-      this.space.save();
-        this.space.fillStyle = this.COLORS.WHITE;
-        this.space.fillRect(star.x, star.y, star.size, star.size);
-      this.space.restore();
+      this.graphics.beginFill(0xffffff);
+      this.graphics.drawRect(star.x, star.y, star.size, star.size);
+      this.graphics.endFill();
     },
 
     drawPlanets: function(planets) {
@@ -142,33 +104,18 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
     },
 
     drawPlanet: function(planet) {
-      this.space.save();
-        // this.space.beginPath();
-        // this.space.strokeStyle = "#fafafa";
-        // this.space.strokeRect(
-        //   planet.area.x - planet.area.radius,
-        //   planet.area.y - planet.area.radius,
-        //   planet.area.radius * 2,
-        //   planet.area.radius * 2
-        // );
+      var color = (planet.hostile) ? 0xff0000 : 0x00ff00;
+      this.graphics.lineStyle(1, color);
+      this.graphics.drawCircle(planet.x, planet.y, planet.area.radius);
+      this.graphics.lineStyle(0);
 
-        this.space.beginPath();
-        this.space.arc(planet.area.x, planet.area.y, planet.area.radius, 0, 2 * Math.PI, false);
-        this.space.lineWidth = 1;
-        this.space.strokeStyle = (planet.hostile) ? this.COLORS.RED : this.COLORS.GREEN;
-        this.space.stroke();
-
-        this.space.fillStyle = this.COLORS.WHITE;
-        this.space.beginPath();
-        this.space.arc(planet.x, planet.y, planet.radius, 0, 2 * Math.PI, false);
-        this.space.fill();
-      this.space.restore();
+      this.graphics.beginFill(0xffffff);
+      this.graphics.drawCircle(planet.x, planet.y, planet.radius);
+      this.graphics.endFill();
     },
 
     drawSpaceEntities: function() {
-      this.clearScreen(this.spaceEntities);
-      // this.drawQuadtree(this.game.physics.world.tree);
-      // this.drawBodies(this.game.physics.world.bodies);
+      this.drawPlanets(this.game.map.planets);
       this.drawEntities();
     },
 
@@ -206,15 +153,9 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
         y = mortal.body.position.y + dy * 2;
         width = dw * mortal.getHealthAsPercent() / 100;
 
-      this.spaceEntities.save();
-        this.spaceEntities.translate(x, y);
-        this.spaceEntities.beginPath();
-        this.spaceEntities.moveTo(0, 0);
-        this.spaceEntities.lineTo(width, 0);
-        this.spaceEntities.strokeStyle = this.COLORS.WHITE;
-        this.spaceEntities.lineWidth = 2;
-        this.spaceEntities.stroke();
-      this.spaceEntities.restore();
+      this.ui.lineStyle(2, 0xffffff);
+      this.ui.moveTo(x, y);
+      this.ui.lineTo(x + width, y);
     },
 
     drawEntity: function(entity) {
@@ -229,79 +170,74 @@ define(['map', 'entity', 'mortal', 'ship', 'bullet'], function(Map, Entity, Mort
           dw = sprite.width,
           dh = sprite.height;
 
-      // this is totally a hack
-      if (entity instanceof Ship && entity.isMoving()) {
-        y = 32;
+      // pixi
+      // if (entity instanceof Ship) {
+      var s = entity.getSprite();
+      if (typeof s === 'undefined') {
+        s = PIXI.Sprite.fromFrame('ship/inactive.png');
+        entity.setPixiSprite(s);
+        this.stage.addChild(s);
       }
 
-      this.spaceEntities.save();
-        this.spaceEntities.translate(entity.body.position.x, entity.body.position.y);
-        this.spaceEntities.rotate(angle * Math.PI/180);
-        this.spaceEntities.drawImage(sprite.image, Math.floor(x), Math.floor(y), 32, 32, dx, dy, dw, dh);
-      this.spaceEntities.restore();
-    },
+      var pose = entity.getPose();
 
-    drawBodies: function(bodies) {
-      var self = this;
-
-      _.each(bodies, function(body) {
-        self.drawBody(body);
-      });
-    },
-
-    drawBody: function(body) {
-      this.spaceEntities.save();
-        this.spaceEntities.beginPath();
-        this.spaceEntities.arc(body.position.x, body.position.y, body.shape.radius, 0, 2 * Math.PI, false);
-        this.spaceEntities.lineWidth = 1;
-        this.spaceEntities.strokeStyle = this.COLORS.MAGENTA;
-        this.spaceEntities.stroke();
-      this.spaceEntities.restore();
-    },
-
-    renderEntities: function(x, y) {
-      var center = {
-        x: x || 0,
-        y: y || 0
+      if (entity instanceof Bullet) {
+        s.texture = PIXI.Sprite.fromImage(pose).texture;
+      } else if (entity instanceof Ship) {
+        s.texture = PIXI.Sprite.fromFrame(pose).texture;
       }
 
-      var canvas = this.spaceEntitiesCanvas,
-          sx = center.x - this.canvas.width / 2,
-          sy = center.y - this.canvas.height / 2,
-          swidth = this.canvas.width,
-          sheight = this.canvas.height,
-          x = 0,
-          y = 0,
-          width = this.canvas.width,
-          height = this.canvas.height;
-
-      sx = (sx < 0) ? 0 : sx;
-      sx = (sx > canvas.width - this.canvas.width) ? canvas.width - this.canvas.width : sx;
-      sy = (sy < 0) ? 0 : sy;
-      sy = (sy > canvas.height - this.canvas.height) ? canvas.height - this.canvas.height : sy;
-
-      this.background.drawImage(canvas, sx, sy, swidth, sheight, x, y, width, height);
-    },
-
-    drawQuadtree: function(tree) {
-      this.drawNode(tree.root);
-    },
-
-    drawNode: function(node) {
-      if (node.nodes.length) {
-        _.each(node.nodes, this.drawNode, this);
+      if (entity.alive === false) {
+        this.stage.removeChild(s);
+        entity.setPixiSprite();
+      } else {
+        s.position.x = entity.body.position.x;
+        s.position.y = entity.body.position.y;
+        s.height = dh;
+        s.width = dw;
+        s.anchor.x = 0.5;
+        s.anchor.y = 0.5;
+        s.rotation = (angle * Math.PI) / 180;
       }
+    },
 
-      this.spaceEntities.save();
-        this.spaceEntities.strokeStyle = this.COLORS.TEAL;
-        this.spaceEntities.strokeRect(
-          node._bounds.x,
-          node._bounds.y,
-          node._bounds.width,
-          node._bounds.height
-        );
-      this.spaceEntities.restore();
-    }
+    // drawBodies: function(bodies) {
+    //   var self = this;
+    //
+    //   _.each(bodies, function(body) {
+    //     self.drawBody(body);
+    //   });
+    // },
+    //
+    // drawBody: function(body) {
+    //   this.spaceEntities.save();
+    //     this.spaceEntities.beginPath();
+    //     this.spaceEntities.arc(body.position.x, body.position.y, body.shape.radius, 0, 2 * Math.PI, false);
+    //     this.spaceEntities.lineWidth = 1;
+    //     this.spaceEntities.strokeStyle = this.COLORS.MAGENTA;
+    //     this.spaceEntities.stroke();
+    //   this.spaceEntities.restore();
+    // },
+
+    // drawQuadtree: function(tree) {
+    //   this.drawNode(tree.root);
+    // },
+
+    // drawNode: function(node) {
+    //   if (node.nodes.length) {
+    //     _.each(node.nodes, this.drawNode, this);
+    //   }
+    //
+    //   this.spaceEntities.save();
+    //     this.spaceEntities.strokeStyle = this.COLORS.TEAL;
+    //     this.spaceEntities.strokeRect(
+    //       node._bounds.x,
+    //       node._bounds.y,
+    //       node._bounds.width,
+    //       node._bounds.height
+    //     );
+    //   this.spaceEntities.restore();
+    // }
   });
 
   return Renderer;

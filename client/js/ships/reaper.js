@@ -3,14 +3,14 @@ define(['ship', 'physics/point'], function(Ship, Point) {
 
     ROTATION_SPEED: 2,
     ACCELERATION: .05,
-    MAX_SPEED: 3,
+    MAX_SPEED: 10,
     MAX_HEALTH: 50,
 
     init: function(captain, name) {
       this._super(name);
 
       this.spriteParams = {
-        name: "ship",
+        name: "ship.old",
         width: 32,
         height: 32,
         radius: 20

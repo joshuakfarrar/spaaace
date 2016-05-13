@@ -33,6 +33,14 @@ define(['physics/point'], function(Point) {
       this.sprite.offsetY = -(this.sprite.height / 2);
     },
 
+    setPixiSprite: function(sprite) {
+      this._sprite = sprite;
+    },
+
+    getSprite: function() {
+      return this._sprite;
+    },
+
     getSpriteName: function() {
       return this.spriteParams.name;
     },
@@ -41,6 +49,11 @@ define(['physics/point'], function(Point) {
       if (point instanceof Point) {
         this.body.position = point;
       }
+    },
+
+    getPosition: function() {
+        if (this.body) return this.body
+        else return false;
     },
 
     setAngle: function(angle) {

@@ -42,6 +42,12 @@ define(['entity', 'mortal', 'physics/vector'], function(Entity, Mortal, Vector) 
       this.destroy();
     },
 
+    // pixi
+    getPose: function() {
+      return 'img/ball.png';
+    },
+    // end pixi
+
     tick: function() {
       if (this.body.distanceTraveled() > 500) {
         this.destroy();
@@ -50,7 +56,6 @@ define(['entity', 'mortal', 'physics/vector'], function(Entity, Mortal, Vector) 
 
     destroy: function() {
       this._super();
-
       this.exists = false;
     }
   });

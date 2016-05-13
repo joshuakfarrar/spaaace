@@ -7,19 +7,17 @@ define(['ship', 'entity', 'physics/point'], function(Ship, Entity, Point) {
     },
 
     setShip: function(ship) {
-      if (ship instanceof Ship) {
-        var self = this;
+      if (! ship instanceof Ship) return false;
 
-        this.ship = ship;
+      var self = this;
 
-        this.ship.setFire(function() {
-          self.game.fireBullet(self);
-        });
+      this.ship = ship;
 
-        return true;
-      } else {
-        return false;
-      }
+      this.ship.setFire(function() {
+        self.game.fireBullet(self);
+      });
+
+      return true;
     },
 
     getShip: function() {

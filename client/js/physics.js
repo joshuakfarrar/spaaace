@@ -3,9 +3,7 @@ define(['physics/world', 'physics/rectangle', 'physics/body'], function(World, R
     init: function(game) {
       this.game = game;
 
-      var canvas = this.game.renderer.spaceCanvas;
-      var bounds = new Rectangle(0, 0, canvas.width, canvas.height);
-
+      var bounds = new Rectangle(0, 0, game.MAX_WIDTH, game.MAX_HEIGHT);
       this.world = new World(bounds);
     },
 
