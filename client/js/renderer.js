@@ -1,15 +1,13 @@
 define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], function(Screen, Camera, Map, Entity, Mortal, Ship, Bullet) {
   var Renderer = Class.extend({
-    // COLORS: {
-    //   RED:   "#ad1e34",
-    //   GREEN: "#5aa58c",
-    //   WHITE: "#ffffff",
-    //   BLACK: "#1b1824",
-    //   MAGENTA: "#ff00ff",
-    //   TEAL: "#50b4a2"
-    // },
+    COLORS: {
+      WHITE: 0xffffff,
+      BLACK: 0x1b1824,
+      RED: 0xad1e34,
+      TEAL: 0x19945c
+    },
 
-    init: function(game, canvas, background, foreground) {
+    init: function(game) {
       this.game = game;
 
       this.map = new Map(this);
@@ -35,20 +33,23 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       this.screen = screen;
 
       this.renderer = new PIXI.autoDetectRenderer(screen.width, screen.height, {
-        backgroundColor: 0x1b1824,
+        backgroundColor: this.COLORS.BLACK,
         antialias: true
       });
+
+      this.interactions = new PIXI.interaction.InteractionManager(this.renderer, {
+        autoPreventDefault: false
+      });
+
       this.graphics = new PIXI.Graphics();
       this.ui = new PIXI.Graphics();
       this.stage = new PIXI.Container();
 
+      this.components = [];
+
       this.loader = PIXI.loader;
       this.loader.add('ship', '/img/ship.json');
       this.loader.add('bullet', '/img/ball.png');
-      var self = this;
-      this.loader.once('complete', function() {
-        self.sprite = PIXI.Sprite.fromFrame('ship/inactive.png');
-      });
       this.loader.load();
 
       var camera = new Camera(this);
@@ -56,6 +57,21 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       this.camera = camera;
 
       document.getElementById('canvas').appendChild(this.renderer.view);
+    },
+
+    positionToPoint: function(x, y) {
+      var p = new PIXI.Point();
+      this.interactions.mapPositionToPoint(p, x, y);
+      return p;
+    },
+
+    positionFromClick: function(x, y) {
+      var focus = this.camera.getFocus();
+      var p = this.positionToPoint(x, y);
+      return {
+        x: focus.x - p.x,
+        y: focus.y - p.y
+      };
     },
 
     initFPS: function() {
@@ -66,16 +82,35 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       return this.screen;
     },
 
-    renderFrame: function() {
-      var player = this.game.player.getPosition();
+    attemptClickOnInteractiveElement: function() {
+      this.attemptActionOnInteractives(function(e, hit) {
+        if (!hit) return false;
+        else e.onClick();
+      });
+    },
 
+    renderFrame: function() {
       this.ui.clear();
+
+      this.attemptActionOnInteractives(this.checkHoverState);
+
       this.drawSpaceEntities();
+      this.drawUI();
       this.renderer.render(this.stage);
 
       var focus = this.camera.getFocus();
       this.stage.position.x = focus.x;
       this.stage.position.y = focus.y;
+    },
+
+    attemptActionOnInteractives: function(cb) {
+      var mouse = this.game.mouse.getPosition();
+      var p = this.positionToPoint(mouse.x, mouse.y);
+      this.interactions.processInteractive(p, this.stage, cb, true);
+    },
+
+    checkHoverState: function(e, hit) {
+      e.onHover(hit);
     },
 
     drawSpace: function() {
@@ -105,7 +140,7 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
     },
 
     drawPlanet: function(planet) {
-      var color = (planet.hostile) ? 0xff0000 : 0x00ff00;
+      var color = (planet.hostile) ? this.COLORS.RED : 0x00ff00;
       this.ui.lineStyle(1, color);
       this.ui.drawCircle(planet.x, planet.y, planet.area.radius);
       this.ui.lineStyle(0);
@@ -171,8 +206,6 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
           dw = sprite.width,
           dh = sprite.height;
 
-      // pixi
-      // if (entity instanceof Ship) {
       var s = entity.getSprite();
       if (typeof s === 'undefined') {
         s = PIXI.Sprite.fromFrame('ship/inactive.png');
@@ -181,12 +214,7 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       }
 
       var pose = entity.getPose();
-
-      if (entity instanceof Bullet) {
-        s.texture = PIXI.Sprite.fromImage(pose).texture;
-      } else if (entity instanceof Ship) {
-        s.texture = PIXI.Sprite.fromFrame(pose).texture;
-      }
+      s.texture = PIXI.Sprite.fromImage(pose).texture;
 
       if (entity.alive === false) {
         this.stage.removeChild(s);
@@ -200,6 +228,21 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
         s.anchor.y = 0.5;
         s.rotation = (angle * Math.PI) / 180;
       }
+    },
+
+    drawUI: function() {
+      var self = this;
+
+      _.each(this.components, function(component) {
+        var c = component.render();
+        if (c) {
+          self.ui.addChild(c);
+        }
+      });
+    },
+
+    addToUi: function(component) {
+      this.components.push(component);
     },
 
     // drawBodies: function(bodies) {

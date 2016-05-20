@@ -1,7 +1,7 @@
 define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/earth',
-  'sprite', 'entity', 'input', 'map', 'physics', 'bulletManager', 'physics/body', 'physics/circle', 'physics/point'],
+  'sprite', 'entity', 'input', 'mouse', 'map', 'physics', 'bulletManager', 'physics/body', 'physics/circle', 'physics/point'],
  function(Renderer, Updater, Player, Reaper, Bullet, Earth,
-  Sprite, Entity, Input, Map, Physics, BulletManager, Body, Circle, Point) {
+  Sprite, Entity, Input, Mouse, Map, Physics, BulletManager, Body, Circle, Point) {
   var Game = Class.extend({
     init: function(app) {
       this.app = app;
@@ -21,8 +21,8 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.spriteNames = ["ship.old", "ball"];
     },
 
-    setup: function(canvas, background, foreground) {
-      this.setRenderer(new Renderer(this, canvas, background, foreground));
+    setup: function() {
+      this.setRenderer(new Renderer(this));
     },
 
     setInput: function(input) {
@@ -31,10 +31,6 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
     setRenderer: function(renderer) {
       this.renderer = renderer;
-    },
-
-    setUpdater: function(updater) {
-      this.updater = updater;
     },
 
     setPhysics: function(physics) {
@@ -49,8 +45,10 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       var self = this;
 
       this.loadSprites();
-      this.setUpdater(new Updater(this));
-      this.setInput(new Input(this));
+
+      this.updater = Updater.getInstance(this);
+      this.input = new Input(this);
+      this.mouse = new Mouse();
       this.setPhysics(new Physics(this));
       this.setBulletManager(new BulletManager());
 

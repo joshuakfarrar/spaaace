@@ -1,8 +1,12 @@
 define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
   var Updater = Class.extend({
     init: function(game) {
+      if (typeof game === 'undefined') {
+        return false;
+        throw new Error("The app can't load without a game!");
+      }
       this.game = game;
-      this.player = this.game.player;
+      this.player = game.player;
     },
 
     update: function() {
@@ -14,6 +18,11 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     },
 
     processInput: function() {
+      if (this.game.mouse.clicked) {
+        var mouse = this.game.mouse;
+        this.game.renderer.attemptClickOnInteractiveElement();
+        mouse.clicked = false;
+      }
       if (this.game.input.isKeyDown(Keyboard.A)) {
         this.player.turnLeft();
       } else if (this.game.input.isKeyDown(Keyboard.D)) {
@@ -57,5 +66,12 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     }
   });
 
-  return Updater;
+  return {
+    getInstance: function(game) {
+      if (!this.updater) {
+        this.updater = new Updater(game);
+      }
+      return this.updater;
+    }
+  };
 });

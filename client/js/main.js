@@ -40,7 +40,7 @@ define(['jquery'], function($) {
 
       game = new Game(app);
       app.setGame(game);
-      game.setup(canvas, background, foreground);
+      game.setup();
       game.loadMap();
 
       game.run(data);

@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Comfortaa';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Comfortaa'), local('Comfortaa-Regular'), url(https://fonts.gstatic.com/s/comfortaa/v7/qLBu5CQmSMt1H43OiWJ77aCWcynf_cDxXwCLxiixG1c.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Comfortaa';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Comfortaa Bold'), local('Comfortaa-Bold'), url(https://fonts.gstatic.com/s/comfortaa/v7/fND5XPYKrF2tQDwwfWZJI4nF5uFdDttMLvmWuJdhhgs.ttf) format('truetype');
+}

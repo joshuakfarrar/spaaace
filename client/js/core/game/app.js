@@ -16,7 +16,7 @@ define(function() {
       });
 
       // prevent context menus from showing up when the player right clicks
-      $('canvas').on('contextmenu', function(e) {
+      $('#canvas').on('contextmenu', function(e) {
         e.preventDefault();
       });
     },
