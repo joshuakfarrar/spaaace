@@ -21,8 +21,8 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.spriteNames = ["ship.old", "ball"];
     },
 
-    setup: function() {
-      this.setRenderer(new Renderer(this));
+    setup: function(width, height) {
+      this.setRenderer(new Renderer(this, width, height));
     },
 
     setInput: function(input) {
@@ -31,6 +31,10 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
     setRenderer: function(renderer) {
       this.renderer = renderer;
+    },
+
+    resize(width, height) {
+      this.renderer.resize(width, height);
     },
 
     setPhysics: function(physics) {
@@ -44,7 +48,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
     run: function(data) {
       var self = this;
 
-      this.loadSprites();
+      // this.loadSprites();
 
       this.updater = Updater.getInstance(this);
       this.input = new Input(this);
@@ -53,7 +57,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.setBulletManager(new BulletManager());
 
       var wait = setInterval(function() {
-        if (self.spritesLoaded()) {
+        // if (self.spritesLoaded()) {
 
           self.initPlanets();
           self.initPlayer({
@@ -66,7 +70,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
             self.start();
           }
           clearInterval(wait);
-        }
+        // }
       }, 100);
     },
 
@@ -76,10 +80,10 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
     initPlayer: function(player) {
       if (this.player.setShip(new Reaper(this.player, "Kaylee"))) {
-        this.player.ship.setSprite(this.sprites[this.player.ship.getSpriteName()]);
+        // this.player.ship.setSprite(this.sprites[this.player.ship.getSpriteName()]);
 
         var body = new Body()
-          , circle = new Circle(this.player.ship.sprite.width / 2);
+          , circle = new Circle(this.player.ship.spriteParams.width / 2);
 
         body.setShape(circle);
         body.setMaxSpeed(this.player.ship.MAX_SPEED);
@@ -115,9 +119,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       if (character && character.ship) {
         var ship = character.getShip();
 
-        ship.setSprite(this.sprites[character.ship.getSpriteName()]);
-
-        var circle = new Circle(ship.sprite.width / 2);
+        var circle = new Circle(ship.spriteParams.width / 2);
         ship.body.setShape(circle);
 
         this.physics.enable(ship);
@@ -210,20 +212,20 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.isStopped = true;
     },
 
-    loadSprites: function() {
-      _.each(this.spriteNames, this.loadSprite, this);
-    },
-
-    loadSprite: function(name) {
-      this.sprites[name] = new Sprite(name);
-    },
-
-    spritesLoaded: function() {
-      if(_.any(this.sprites, function(sprite) { return !sprite.isLoaded; })) {
-        return false;
-      }
-      return true;
-    },
+    // loadSprites: function() {
+    //   _.each(this.spriteNames, this.loadSprite, this);
+    // },
+    //
+    // loadSprite: function(name) {
+    //   this.sprites[name] = new Sprite(name);
+    // },
+    //
+    // spritesLoaded: function() {
+    //   if(_.any(this.sprites, function(sprite) { return !sprite.isLoaded; })) {
+    //     return false;
+    //   }
+    //   return true;
+    // },
 
     forEachEntity: function(callback) {
       _.each(this.entities, function(entity) {

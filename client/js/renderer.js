@@ -7,7 +7,7 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       TEAL: 0x19945c
     },
 
-    init: function(game) {
+    init: function(game, width, height) {
       this.game = game;
 
       this.map = new Map(this);
@@ -17,27 +17,20 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       this.MAX_WIDTH = game.MAX_WIDTH;
       this.MAX_HEIGHT = game.MAX_HEIGHT;
 
-      this.lastTime = new Date();
+      // this.lastTime = new Date();
       this.frameCount = 0;
       this.maxFPS = this.FPS;
       this.realFPS = 0;
 
-      this.gridW = 30;
-      this.gridH = 14;
-      this.tilesize = 16;
-
-      var width = this.gridW * this.tilesize * 3;
-      var height = this.gridH * this.tilesize * 3.5
-
-      var screen = new Screen(width, height);
+      var screen = new Screen({
+        width: width,
+        height: height,
+        background: this.COLORS.BLACK
+      });
       this.screen = screen;
 
-      this.renderer = new PIXI.autoDetectRenderer(screen.width, screen.height, {
-        backgroundColor: this.COLORS.BLACK,
-        antialias: true
-      });
-
-      this.interactions = new PIXI.interaction.InteractionManager(this.renderer, {
+      var renderer = screen.getRenderer();
+      this.interactions = new PIXI.interaction.InteractionManager(renderer, {
         autoPreventDefault: false
       });
 
@@ -55,8 +48,10 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       var camera = new Camera(this);
       camera.lookAt(this.game.player);
       this.camera = camera;
+    },
 
-      document.getElementById('canvas').appendChild(this.renderer.view);
+    resize(width, height) {
+      this.screen.resize(width, height);
     },
 
     positionToPoint: function(x, y) {
@@ -96,7 +91,9 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
 
       this.drawSpaceEntities();
       this.drawUI();
-      this.renderer.render(this.stage);
+
+      var renderer = this.screen.getRenderer();
+      renderer.render(this.stage);
 
       var focus = this.camera.getFocus();
       this.stage.position.x = focus.x;
@@ -180,14 +177,9 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
     },
 
     drawHealthbar: function(mortal) {
-      var sprite = mortal.sprite,
-        dx = sprite.offsetX,
-        dy = sprite.offsetY,
-        dw = sprite.width;
-
-      var x = mortal.body.position.x + dx,
-        y = mortal.body.position.y + dy * 2;
-        width = dw * mortal.getHealthAsPercent() / 100;
+      var x = mortal.body.position.x - mortal.spriteParams.width / 2,
+        y = mortal.body.position.y - mortal.spriteParams.height;
+        width = mortal.spriteParams.width * mortal.getHealthAsPercent() / 100;
 
       this.ui.lineStyle(2, 0xffffff);
       this.ui.moveTo(x, y);
@@ -200,11 +192,7 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       var sprite = entity.sprite,
           angle = entity.getAngle(),
           x = 0,
-          y = 0,
-          dx = sprite.offsetX,
-          dy = sprite.offsetY,
-          dw = sprite.width,
-          dh = sprite.height;
+          y = 0;
 
       var s = entity.getSprite();
       if (typeof s === 'undefined') {
@@ -222,8 +210,8 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       } else {
         s.position.x = entity.body.position.x;
         s.position.y = entity.body.position.y;
-        s.height = dh;
-        s.width = dw;
+        s.height = entity.spriteParams.height;
+        s.width = entity.spriteParams.width;
         s.anchor.x = 0.5;
         s.anchor.y = 0.5;
         s.rotation = (angle * Math.PI) / 180;

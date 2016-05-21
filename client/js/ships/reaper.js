@@ -11,9 +11,9 @@ define(['ship', 'physics/point'], function(Ship, Point) {
 
       this.spriteParams = {
         name: "ship.old",
-        width: 32,
-        height: 32,
-        radius: 20
+        width: 24,
+        height: 24,
+        radius: 15
       };
 
       // console.log(captain.name + " is now commanding the Reaper-class ship '" + this.name + "'!");

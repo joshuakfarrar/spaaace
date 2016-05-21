@@ -24,13 +24,13 @@ define(['physics/point'], function(Point) {
     },
 
     setSprite: function(sprite) {
-      this.sprite = sprite;
+      // this.sprite = sprite;
 
-      this.sprite.width = this.spriteParams.width;
-      this.sprite.height = this.spriteParams.height;
+      // this.sprite.width = this.spriteParams.width;
+      // this.sprite.height = this.spriteParams.height;
 
-      this.sprite.offsetX = -(this.sprite.width / 2);
-      this.sprite.offsetY = -(this.sprite.height / 2);
+      // this.sprite.offsetX = -(this.sprite.width / 2);
+      // this.sprite.offsetY = -(this.sprite.height / 2);
     },
 
     setPixiSprite: function(sprite) {

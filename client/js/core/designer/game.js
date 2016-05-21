@@ -1,4 +1,4 @@
-define(['../game/game', '../../planets/earth', '../../ui/popup-menu'], function(Game, Earth, PopupMenu) {
+define(['../game/game', '../../planets/earth', '../../ui/context-menu'], function(Game, Earth, ContextMenu) {
   var Designer = Game.extend({
     handleMouseMove: function(x, y) {
       if (this.started) {
@@ -12,7 +12,7 @@ define(['../game/game', '../../planets/earth', '../../ui/popup-menu'], function(
 
       if (this.menu) return false;
 
-      var menu = new PopupMenu({
+      var menu = new ContextMenu({
         position: {
           x: -p.x,
           y: -p.y

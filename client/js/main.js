@@ -34,13 +34,9 @@ define(['jquery'], function($) {
   function initGame(data) {
     var klass = opts.game || 'core/game/game';
     require([klass], function(Game) {
-      var canvas = document.getElementById("entities"),
-        background = document.getElementById("background"),
-        foreground = document.getElementById("foreground");
-
       game = new Game(app);
       app.setGame(game);
-      game.setup();
+      game.setup($(window).width(),$(window).height());
       game.loadMap();
 
       game.run(data);

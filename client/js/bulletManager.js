@@ -17,9 +17,9 @@ define(['bullet', 'physics/body', 'physics/circle'], function(Bullet, Body, Circ
 
     initBulletSprites: function(sprites) {
       _.each(this.bullets, function(bullet) {
-        bullet.setSprite(sprites[bullet.getSpriteName()]);
+        // bullet.setSprite(sprites[bullet.getSpriteName()]);
 
-        var circle = new Circle(bullet.sprite.width / 2);
+        var circle = new Circle(2);
 
         bullet.body.setShape(circle);
       }, this);
