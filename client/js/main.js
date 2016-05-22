@@ -36,7 +36,7 @@ define(['jquery'], function($) {
     require([klass], function(Game) {
       game = new Game(app);
       app.setGame(game);
-      game.setup($(window).width(),$(window).height());
+      game.setup($(window).width(), $(window).height());
       game.loadMap();
 
       game.run(data);

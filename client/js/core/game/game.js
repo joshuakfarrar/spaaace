@@ -21,6 +21,31 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.spriteNames = ["ship.old", "ball"];
     },
 
+    ui: function() {
+      var self = this;
+      return new Promise(function(resolve, reject) {
+        require(['core/game/ui'], function(UI) {
+          var ui = new UI({
+            renderer: self,
+            screen: self.screen
+          });
+          resolve(ui);
+        });
+      });
+    },
+
+    handleLeftClick: function(x, y) {
+    },
+
+    handleRightClick: function(x, y) {
+    },
+
+    handleMouseMove: function(x, y) {
+      if (this.started) {
+        this.mouse.setPosition({ x: x, y: y });
+      }
+    },
+
     setup: function(width, height) {
       this.setRenderer(new Renderer(this, width, height));
     },
@@ -50,7 +75,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
       // this.loadSprites();
 
-      this.updater = Updater.getInstance(this);
+      this.updater = new Updater(this);
       this.input = new Input(this);
       this.mouse = new Mouse();
       this.setPhysics(new Physics(this));

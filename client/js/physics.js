@@ -1,6 +1,8 @@
 define(['physics/world', 'physics/rectangle', 'physics/body'], function(World, Rectangle, Body) {
   var Physics = Class.extend({
     init: function(game) {
+      if (typeof game === 'undefined') return false;
+
       this.game = game;
 
       var bounds = new Rectangle(0, 0, game.MAX_WIDTH, game.MAX_HEIGHT);
@@ -26,6 +28,7 @@ define(['physics/world', 'physics/rectangle', 'physics/body'], function(World, R
       this.world.step();
     }
   });
+
 
   return Physics;
 });

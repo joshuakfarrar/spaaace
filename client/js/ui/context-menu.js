@@ -6,6 +6,9 @@ define(['ui/component', 'ui/label'], function(Component, Label) {
       });
     },
 
+    update: function() {
+    },
+
     render: function() {
       if (this.propertiesHaveNotChanged()) return false;
 
@@ -86,7 +89,7 @@ define(['ui/component', 'ui/label'], function(Component, Label) {
 
       container.addChild(body);
 
-      this.rendered = true
+      this.rendered = true;
 
       return container;
     }

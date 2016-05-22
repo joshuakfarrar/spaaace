@@ -19,7 +19,6 @@ define(['ui/component'], function(Component) {
 
     onClick: function() {
       this.props.onClick(this.parent.props.position);
-      // console.log(this.props.id);
     },
 
     onHover: function(hit) {

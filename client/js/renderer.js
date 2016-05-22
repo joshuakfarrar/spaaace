@@ -8,6 +8,7 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
     },
 
     init: function(game, width, height) {
+      var self = this;
       this.game = game;
 
       this.map = new Map(this);
@@ -34,8 +35,8 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
         autoPreventDefault: false
       });
 
+      this.background = new PIXI.Graphics();
       this.graphics = new PIXI.Graphics();
-      this.ui = new PIXI.Graphics();
       this.stage = new PIXI.Container();
 
       this.components = [];
@@ -48,6 +49,12 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       var camera = new Camera(this);
       camera.lookAt(this.game.player);
       this.camera = camera;
+
+      game.ui.call(this)
+        .then(function(ui) {
+          screen.addObserver(ui);
+          self.ui = ui;
+        });
     },
 
     resize(width, height) {
@@ -77,27 +84,30 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       return this.screen;
     },
 
+    renderFrame: function() {
+      this.graphics.clear();
+
+      this.attemptActionOnInteractives(this.checkHoverState);
+
+      this.drawSpaceEntities();
+      this.drawGraphics();
+
+      var renderer = this.screen.getRenderer();
+      renderer.clearBeforeRender = true;
+      renderer.render(this.stage);
+      renderer.clearBeforeRender = false;
+      if (this.ui) renderer.render(this.ui.container);
+
+      var focus = this.camera.getFocus();
+      this.stage.position.x = focus.x;
+      this.stage.position.y = focus.y;
+    },
+
     attemptClickOnInteractiveElement: function() {
       this.attemptActionOnInteractives(function(e, hit) {
         if (!hit) return false;
         else e.onClick();
       });
-    },
-
-    renderFrame: function() {
-      this.ui.clear();
-
-      this.attemptActionOnInteractives(this.checkHoverState);
-
-      this.drawSpaceEntities();
-      this.drawUI();
-
-      var renderer = this.screen.getRenderer();
-      renderer.render(this.stage);
-
-      var focus = this.camera.getFocus();
-      this.stage.position.x = focus.x;
-      this.stage.position.y = focus.y;
     },
 
     attemptActionOnInteractives: function(cb) {
@@ -117,9 +127,9 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
 
       this.drawStars(map.stars);
 
-      var sprite = new PIXI.Sprite(this.graphics.generateTexture());
+      var sprite = new PIXI.Sprite(this.background.generateTexture());
       this.stage.addChild(sprite);
-      this.stage.addChild(this.ui);
+      this.stage.addChild(this.graphics);
     },
 
     drawStars: function(stars) {
@@ -127,9 +137,9 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
     },
 
     drawStar: function(star) {
-      this.graphics.beginFill(0xffffff);
-      this.graphics.drawRect(star.x, star.y, star.size, star.size);
-      this.graphics.endFill();
+      this.background.beginFill(0xffffff);
+      this.background.drawRect(star.x, star.y, star.size, star.size);
+      this.background.endFill();
     },
 
     drawPlanets: function(planets) {
@@ -138,13 +148,13 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
 
     drawPlanet: function(planet) {
       var color = (planet.hostile) ? this.COLORS.RED : 0x00ff00;
-      this.ui.lineStyle(1, color);
-      this.ui.drawCircle(planet.x, planet.y, planet.area.radius);
-      this.ui.lineStyle(0);
+      this.graphics.lineStyle(1, color);
+      this.graphics.drawCircle(planet.x, planet.y, planet.area.radius);
+      this.graphics.lineStyle(0);
 
-      this.ui.beginFill(0xffffff);
-      this.ui.drawCircle(planet.x, planet.y, planet.radius);
-      this.ui.endFill();
+      this.graphics.beginFill(0xffffff);
+      this.graphics.drawCircle(planet.x, planet.y, planet.radius);
+      this.graphics.endFill();
     },
 
     drawSpaceEntities: function() {
@@ -181,9 +191,9 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
         y = mortal.body.position.y - mortal.spriteParams.height;
         width = mortal.spriteParams.width * mortal.getHealthAsPercent() / 100;
 
-      this.ui.lineStyle(2, 0xffffff);
-      this.ui.moveTo(x, y);
-      this.ui.lineTo(x + width, y);
+      this.graphics.lineStyle(2, 0xffffff);
+      this.graphics.moveTo(x, y);
+      this.graphics.lineTo(x + width, y);
     },
 
     drawEntity: function(entity) {
@@ -218,13 +228,13 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       }
     },
 
-    drawUI: function() {
+    drawGraphics: function() {
       var self = this;
 
       _.each(this.components, function(component) {
         var c = component.render();
         if (c) {
-          self.ui.addChild(c);
+          self.graphics.addChild(c);
         }
       });
     },

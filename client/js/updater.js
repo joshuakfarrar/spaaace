@@ -3,7 +3,6 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     init: function(game) {
       if (typeof game === 'undefined') {
         return false;
-        throw new Error("The app can't load without a game!");
       }
       this.game = game;
       this.player = game.player;
@@ -66,12 +65,5 @@ define(['keyboard', 'bullet'], function(Keyboard, Bullet) {
     }
   });
 
-  return {
-    getInstance: function(game) {
-      if (!this.updater) {
-        this.updater = new Updater(game);
-      }
-      return this.updater;
-    }
-  };
+  return Updater;
 });

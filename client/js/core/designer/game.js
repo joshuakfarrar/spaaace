@@ -1,9 +1,20 @@
-define(['../game/game', '../../planets/earth', '../../ui/context-menu'], function(Game, Earth, ContextMenu) {
+define(['../game/game', '../../planets/earth', '../../ui/context-menu', '../../ui/button'], function(Game, Earth, ContextMenu, Button) {
   var Designer = Game.extend({
-    handleMouseMove: function(x, y) {
-      if (this.started) {
-        this.mouse.setPosition({ x: x, y: y });
-      }
+    init: function(app) {
+      this._super(app);
+    },
+
+    ui: function() {
+      var self = this;
+      return new Promise(function(resolve, reject) {
+        require(['core/designer/ui'], function(UI) {
+          var ui = new UI({
+            renderer: self,
+            screen: self.screen
+          });
+          resolve(ui);
+        });
+      });
     },
 
     handleRightClick: function(x, y) {
@@ -54,11 +65,6 @@ define(['../game/game', '../../planets/earth', '../../ui/context-menu'], functio
 
     handleLeftClick: function() {
       this.mouse.click();
-      // var p = this.renderer.positionFromClick(x, y);
-      // var bodies = this.physics.getBodiesThatIntersectWith({ x: -p.x, y: -p.y });
-      // _.each(bodies, function(body) {
-      //   console.log(body.entity);
-      // });
     },
 
     openMenu: function(menu) {
