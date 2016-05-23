@@ -17,6 +17,7 @@ define(function() {
 
       // prevent context menus from showing up when the player right clicks
       $('#canvas').on('contextmenu', function(e) {
+        game.handleRightClick(e.pageX, e.pageY);
         e.preventDefault();
       });
 
@@ -24,9 +25,6 @@ define(function() {
         switch(e.which) {
           case 1:
             game.handleLeftClick(e.pageX, e.pageY);
-            break;
-          case 3:
-            game.handleRightClick(e.pageX, e.pageY);
             break;
         }
       });
