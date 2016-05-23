@@ -72,8 +72,13 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
     run: function(data) {
       var self = this;
+      self.spritesLoaded = false;
 
       // this.loadSprites();
+      this.renderer.loadSprites()
+        .then(function() {
+          self.spritesLoaded = true;
+        });
 
       this.updater = new Updater(this);
       this.input = new Input(this);
@@ -82,7 +87,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
       this.setBulletManager(new BulletManager());
 
       var wait = setInterval(function() {
-        // if (self.spritesLoaded()) {
+        if (self.spritesLoaded) {
 
           self.initPlanets();
           self.initPlayer({
@@ -95,7 +100,7 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
             self.start();
           }
           clearInterval(wait);
-        // }
+        }
       }, 100);
     },
 
@@ -105,7 +110,6 @@ define(['renderer', 'updater', 'player', 'ships/reaper', 'bullet', 'planets/eart
 
     initPlayer: function(player) {
       if (this.player.setShip(new Reaper(this.player, "Kaylee"))) {
-        // this.player.ship.setSprite(this.sprites[this.player.ship.getSpriteName()]);
 
         var body = new Body()
           , circle = new Circle(this.player.ship.spriteParams.width / 2);

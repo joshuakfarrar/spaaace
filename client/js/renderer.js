@@ -41,11 +41,6 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
 
       this.components = [];
 
-      this.loader = PIXI.loader;
-      this.loader.add('ship', '/img/ship.json');
-      this.loader.add('bullet', '/img/ball.png');
-      this.loader.load();
-
       var camera = new Camera(this);
       camera.lookAt(this.game.player);
       this.camera = camera;
@@ -55,6 +50,16 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
           screen.addObserver(ui);
           self.ui = ui;
         });
+    },
+
+    loadSprites: function() {
+      return new Promise(function(resolve, reject) {
+        this.loader = PIXI.loader;
+        this.loader.add('ship', '/img/ship.json');
+        this.loader.add('bullet', '/img/ball.png');
+        loader.once('complete', resolve);
+        this.loader.load();
+      })
     },
 
     resize(width, height) {
