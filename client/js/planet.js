@@ -1,6 +1,7 @@
 define(['areas/circular', 'bot', 'ships/reaper', 'physics/point', 'physics/circle', 'physics/body'], function(CircularArea, Bot, Reaper, Point, Circle, Body) {
   var Planet = Class.extend({
     init: function(game, params) {
+      if (! game || ! params) return false;
       this.game = game;
 
       this.defensesActivated = false;

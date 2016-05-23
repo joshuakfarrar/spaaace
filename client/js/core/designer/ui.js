@@ -15,6 +15,8 @@ define(['../game/ui', '../../ui/button'], function(UI, Button) {
         style: {
           font: "bold 24px Comfortaa",
           color: renderer.COLORS.WHITE,
+          backgroundColor: renderer.COLORS.BLACK,
+          activeBackgroundColor: renderer.COLORS.TEAL,
           border: {
             width: 1,
             color: renderer.COLORS.TEAL

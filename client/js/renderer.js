@@ -114,6 +114,7 @@ define(['screen', 'camera', 'map', 'entity', 'mortal', 'ship', 'bullet'], functi
       var mouse = this.game.mouse.getPosition();
       var p = this.positionToPoint(mouse.x, mouse.y);
       this.interactions.processInteractive(p, this.stage, cb, true);
+      this.interactions.processInteractive(p, this.ui.container, cb, true);
     },
 
     checkHoverState: function(e, hit) {

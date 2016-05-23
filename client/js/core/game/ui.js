@@ -24,7 +24,6 @@ define(['../../ui/component'], function(Component) {
       }
     },
 
-    render: function() {
-    }
+    render() {}
   });
 });
